@@ -839,23 +839,24 @@ const UNITS = [
    穿刺型 = 单体高伤（克制重装）；爆破型 = 范围溅射（克制成群步兵）；速射型 = 高频压制
    --------------------------------------------------------------------- */
 const TOWER_ARCH = [
-  /* rate 是「射击间隔」，越小越快；下面三个系数已按此语义修正 */
-  { key:'pierce', tag:'穿刺', costM:1.00, atkM:1.90, rateM:1.35, rangeM:1.05, splashM:0,
-    desc:'单体高伤，专克重装与攻城单位' },
-  { key:'blast',  tag:'爆破', costM:1.15, atkM:1.25, rateM:1.15, rangeM:0.95, splashM:1.35,
+  /* dpsM：相对该时代基准 DPS 的倍率；intervalM：射击间隔倍率（越小越快）
+     单发伤害由「目标 DPS × 间隔」反推，因此三种塔的每秒输出相当，手感却完全不同 */
+  { key:'pierce', tag:'穿刺', costM:1.00, dpsM:1.05, intervalM:1.50, rangeM:1.05, splashM:0,
+    desc:'慢速重击，单发伤害最高，专克重装与攻城单位' },
+  { key:'blast',  tag:'爆破', costM:1.15, dpsM:0.85, intervalM:1.15, rangeM:0.95, splashM:1.35,
     desc:'范围溅射，成群步兵的克星' },
-  { key:'rapid',  tag:'速射', costM:1.30, atkM:0.50, rateM:0.40, rangeM:1.00, splashM:0,
-    desc:'高频压制，断兵线最稳' },
+  { key:'rapid',  tag:'速射', costM:1.30, dpsM:0.95, intervalM:0.09, rangeM:1.00, splashM:0,
+    desc:'每秒 6~10 发高频连射，断兵线最稳' },
 ];
 const TOWER_BASE = [
-  { name:'巨石',   cost:80,  hp:480,  atk:30, rate:1.60, range:560, proj:'boulder', splash:48 },
-  { name:'青铜',   cost:130, hp:680,  atk:47, rate:1.35, range:600, proj:'bolt',    splash:40 },
-  { name:'石弩',   cost:190, hp:950,  atk:70, rate:1.75, range:640, proj:'boulder', splash:60 },
-  { name:'火药',   cost:260, hp:1300, atk:93, rate:1.70, range:660, proj:'shell',   splash:70 },
-  { name:'钢铁',   cost:340, hp:1650, atk:118,rate:1.60, range:690, proj:'shell',   splash:76 },
-  { name:'军械',   cost:440, hp:2050, atk:147,rate:1.50, range:730, proj:'rocket',  splash:86 },
-  { name:'离子',   cost:560, hp:2450, atk:180,rate:1.35, range:770, proj:'laser',   splash:80 },
-  { name:'相位',   cost:700, hp:2900, atk:218,rate:1.25, range:820, proj:'laser',   splash:92 },
+  { name:'巨石',   cost:80,  hp:480,  atk:41, rate:1.60, range:560, proj:'boulder', splash:48 },
+  { name:'青铜',   cost:130, hp:680,  atk:64, rate:1.35, range:600, proj:'bolt',    splash:40 },
+  { name:'石弩',   cost:190, hp:950,  atk:95, rate:1.75, range:640, proj:'boulder', splash:60 },
+  { name:'火药',   cost:260, hp:1300, atk:126,rate:1.70, range:660, proj:'shell',   splash:70 },
+  { name:'钢铁',   cost:340, hp:1650, atk:159,rate:1.60, range:690, proj:'shell',   splash:76 },
+  { name:'军械',   cost:440, hp:2050, atk:198,rate:1.50, range:730, proj:'rocket',  splash:86 },
+  { name:'离子',   cost:560, hp:2450, atk:243,rate:1.35, range:770, proj:'laser',   splash:80 },
+  { name:'相位',   cost:700, hp:2900, atk:294,rate:1.25, range:820, proj:'laser',   splash:92 },
 ];
 const TOWER_RIGS = [
   ['ballista','catapult','sling'],     // 0 石器
@@ -877,19 +878,25 @@ const TOWER_PROJ = [
   ['laser','rocket','plasma'],         // 6 未来
   ['laser','rocket','plasma'],         // 7 星际
 ];
-const TURRETS = TOWER_BASE.map((b, age)=> TOWER_ARCH.map((a, ti)=> ({
-  key: a.key,
-  name: b.name + a.tag + '塔',
-  cost: Math.round(b.cost * a.costM),
-  hp: b.hp,
-  atk: Math.round(b.atk * a.atkM * 10) / 10,
-  rate: Math.round(b.rate * a.rateM * 100) / 100,
-  range: Math.round(b.range * a.rangeM),
-  proj: TOWER_PROJ[age][ti],
-  rig: TOWER_RIGS[age][ti],
-  splash: Math.round((b.splash||0) * a.splashM),
-  desc: a.desc,
-})));
+const TURRETS = TOWER_BASE.map((b, age)=> TOWER_ARCH.map((a, ti)=> {
+  const baseDps = b.atk / b.rate;                        // 该时代的基准每秒伤害
+  const dps = baseDps * a.dpsM;
+  const rate = Math.max(0.10, Math.round(b.rate * a.intervalM * 1000) / 1000);
+  return {
+    key: a.key,
+    name: b.name + a.tag + '塔',
+    cost: Math.round(b.cost * a.costM),
+    hp: b.hp,
+    atk: Math.round(dps * rate * 10) / 10,               // 由目标 DPS 反推单发伤害
+    rate,
+    dps: Math.round(dps),
+    range: Math.round(b.range * a.rangeM),
+    proj: TOWER_PROJ[age][ti],
+    rig: TOWER_RIGS[age][ti],
+    splash: Math.round((b.splash||0) * a.splashM),
+    desc: a.desc,
+  };
+}));
 /* 塔位越高射程越远、威力越强：射程 +35/层，伤害 +8%/层 */
 function slotBonus(i){ return { range: i*35, dmg: 1 + i*0.08 }; }
 /* 层数越高造价越贵（每层 +25%），避免永远只造最高层 */
@@ -3175,7 +3182,8 @@ function updateTurrets(dt){
           G.shots.push({ kind: def.proj, x:sx, y:sy, vx:aim.vx, vy:aim.vy, grav, life:aim.tt+1.6,
             side, dmg, splash:def.splash||0, color:'#ffd46a', trail:0 });
           muzzleFx(sx,sy, side==='p'?1:-1, '#ffd46a');
-          Sfx.play('shoot', { proj:def.proj, age:t.age, pan: panOf(cx) });
+          // 速射塔每秒 6~10 发，音效做节流，避免噪音糊成一片
+          if(def.key !== 'rapid' || Math.random() < 0.28) Sfx.play('shoot', { proj:def.proj, age:t.age, pan: panOf(cx) });
         }
       }
     }

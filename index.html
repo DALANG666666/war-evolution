@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>战争进化史 · 时代争霸</title>
-<meta name="description" content="战争进化史 · 时代争霸：从石器时代打到未来纪元的网页战争游戏。5 个时代、15 种兵种、竖向堆叠的无敌防御塔、特殊武器与 QQ 账号绑定，打开网址即玩，无需下载。">
+<meta name="description" content="战争进化史 · 时代争霸：从石器时代打到星际纪元的网页战争游戏。8 个时代、24 种兵种、24 种防御塔（穿刺/爆破/速射）、特殊武器与账号绑定，打开网址即玩。">
 <meta name="theme-color" content="#04060b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="战争进化史 · 时代争霸">
-<meta property="og:description" content="从石器时代打到未来纪元的网页战争游戏：出兵、建塔、进化时代、摧毁敌方基地。打开即玩。">
+<meta property="og:description" content="从石器时代打到星际纪元的网页战争游戏：出兵、建塔、进化时代、摧毁敌方基地。打开即玩。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b1220'/><path d='M20 44L44 20M20 20l24 24' stroke='%234aa3ff' stroke-width='7' stroke-linecap='round'/><circle cx='32' cy='32' r='7' fill='%23ffcf5c'/></svg>">
 <style>
 :root{
@@ -342,6 +342,38 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   border:1px solid rgba(255,130,120,.65);color:#ffdcd8;font-size:calc(12.5px*var(--k));line-height:1.6;
   box-shadow:0 calc(10px*var(--k)) calc(30px*var(--k)) rgba(0,0,0,.65);cursor:pointer;word-break:break-word}
 #errBar.on{display:block}
+/* ---------- 防御塔类型选择面板 ---------- */
+#towerPick{position:absolute;left:calc(12px*var(--k) + env(safe-area-inset-left,0px));bottom:calc(286px*var(--k));
+  z-index:60;width:calc(330px*var(--k));padding:calc(12px*var(--k));border-radius:calc(14px*var(--k));
+  background:linear-gradient(180deg,rgba(18,26,44,.96),rgba(9,13,24,.98));border:1px solid var(--stroke);
+  box-shadow:0 calc(16px*var(--k)) calc(44px*var(--k)) rgba(0,0,0,.7)}
+#towerPick.hidden{display:none}
+#towerPick .tp-title{font-size:calc(13px*var(--k));font-weight:800;margin-bottom:calc(9px*var(--k));letter-spacing:.04em}
+#towerPick .tp-list{display:flex;flex-direction:column;gap:calc(7px*var(--k))}
+.tp-card{display:flex;align-items:center;gap:calc(9px*var(--k));padding:calc(7px*var(--k)) calc(9px*var(--k));
+  border-radius:calc(10px*var(--k));background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;transition:.14s}
+.tp-card:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.36)}
+.tp-card.on{border-color:#7fb8ff;background:linear-gradient(90deg,rgba(63,141,255,.28),rgba(31,86,214,.14))}
+.tp-card.bad{filter:grayscale(.55);opacity:.62}
+.tp-card canvas{width:calc(36px*var(--k));height:calc(36px*var(--k));flex:none}
+.tp-card .tp-nm{font-size:calc(12px*var(--k));font-weight:800;line-height:1.3}
+.tp-card .tp-st{font-size:calc(10px*var(--k));color:#9fb4d4;line-height:1.45}
+#towerPick .tp-hint{font-size:calc(10px*var(--k));color:#6f84a3;margin-top:calc(9px*var(--k));line-height:1.5}
+/* ---------- 防御塔管理面板（修复 / 出售） ---------- */
+#towerAct{position:absolute;left:calc(12px*var(--k) + env(safe-area-inset-left,0px));bottom:calc(268px*var(--k));
+  z-index:60;width:calc(268px*var(--k));padding:calc(12px*var(--k));border-radius:calc(14px*var(--k));
+  background:linear-gradient(180deg,rgba(18,26,44,.96),rgba(9,13,24,.98));border:1px solid var(--stroke);
+  box-shadow:0 calc(16px*var(--k)) calc(44px*var(--k)) rgba(0,0,0,.7)}
+#towerAct.hidden{display:none}
+#towerAct .ta-title{font-size:calc(13px*var(--k));font-weight:800;margin-bottom:calc(8px*var(--k))}
+#towerAct .ta-hpbar{height:calc(11px*var(--k));border-radius:99px;background:rgba(0,0,0,.6);overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);margin-bottom:calc(9px*var(--k))}
+#towerAct .ta-hpbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#7ef0a4,#22b455);transition:width .2s}
+#towerAct .ta-info{font-size:calc(11px*var(--k));color:#9fb4d4;line-height:1.7;margin-bottom:calc(10px*var(--k))}
+#towerAct .ta-info b{color:#eaf2ff}
+#towerAct .ta-btns{display:flex;gap:calc(7px*var(--k))}
+#towerAct .ta-btns .btn{flex:1;padding:calc(8px*var(--k)) calc(6px*var(--k));font-size:calc(12px*var(--k))}
 /* ---------- 手机竖屏引导 ---------- */
 #rotate{position:absolute;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(700px 420px at 50% 30%,#12233f 0%,transparent 65%),linear-gradient(160deg,#070b14,#04060b);
@@ -531,7 +563,7 @@ html.touch .preview{display:none !important}
     <div class="bgfx"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="grid"></div></div>
     <div class="menu-card">
       <h2>战争进化史</h2>
-      <div class="tagline">从石器时代打到未来纪元</div>
+      <div class="tagline">从石器时代打到星际纪元 · 8 个时代</div>
       <div class="acct-chip" id="menuAcct"></div>
 
       <div class="sect-title">选择难度</div>
@@ -599,15 +631,16 @@ html.touch .preview{display:none !important}
     <div class="veil"></div>
     <div class="panel-card">
       <h3>玩法说明</h3>
-      <p><b>核心目标：</b>摧毁右侧的敌方基地即可获胜；我方基地被摧毁则失败。基地血量会显示在顶部。</p>
+      <p><b>核心目标：</b>摧毁右侧的敌方基地即可获胜；我方基地被摧毁则失败。基地血量会显示在顶部，并随时代不断加固。</p>
       <ul>
+        <li><b>8 个时代</b>：石器 → 青铜 → 城堡 → 火器 → 工业 → 现代 → 未来 → 星际，每个时代 3 个兵种、3 种防御塔、1 种特殊武器。</li>
         <li><b>金币</b>随时间自动增长，击杀敌人也会掉落金币。金币用于出兵与建造炮塔。</li>
         <li><b>经验</b>随时间稳定增长，造成伤害、承受伤害与击杀都会额外获得经验。经验条满后点击「进化时代」，解锁更强的兵种，炮塔也会同步升级。</li>
         <li><b>波次推进</b>：攒够两个兵的金币再一起出兵，比零散送兵更容易突破防线。</li>
         <li><b>白热化</b>：开局 4 分钟后双方金币产出持续提升；若 10 分钟仍难分胜负，双方基地会被战火持续消耗，保证对局一定会收束。</li>
         <li><b>兵种</b>每代 3 种：近战、远程、重装，各有克制关系，注意前线肉盾与后排输出的搭配。</li>
-        <li><b>防御塔</b>在基地上方竖向堆叠 4 层，层数越高越强但造价越贵（每层 +35 射程、+8% 伤害、+25% 造价）。<b>塔是无敌的，敌人无法摧毁</b>，只会被你的出售操作移除。塔负责守家，想推平对手要在中场先集结部队。</li>
-        <li><b>出售回收</b>：点击战场上的塔，或点击左下角对应层级的塔位，即可出售并回收 <b>60%</b> 金币。</li>
+        <li><b>防御塔</b>在基地上方竖向堆叠 4 层，每层可建「穿刺 / 爆破 / 速射」三种定位之一；层数越高越强也越贵（每层 +35 射程、+5% 伤害、+25% 造价）。塔会挡在前线，也会被敌人拆掉。</li>
+        <li><b>塔的血量与修复</b>：塔头顶有血条；受损后点击塔（或左下角塔位）打开管理面板，可花金币<b>修复</b>（按缺失血量收费，修满约为原价的 60%）或<b>出售</b>回收 60% 金币。</li>
         <li><b>特殊武器</b>每代不同，冷却完毕后点击按钮，再点击战场位置释放。<b>技能只杀伤敌方部队，不会破坏敌方基地</b>——要推平对手只能靠部队打到家门口。</li>
         <li><b>基地随时代加固</b>：每进化一次，基地血量上限提升，并把新增的那部分直接补上。</li>
         <li><b>手机游玩</b>：横屏体验最佳，竖屏会提示横屏（安卓可一键全屏并锁定横屏）；底栏会自动压缩成一条窄带，避免挡住士兵。</li>
@@ -638,6 +671,23 @@ html.touch .preview{display:none !important}
     </div>
   </div>
   <div id="errBar">⚠ 运行异常</div>
+  <!-- 防御塔类型选择（点击空塔位后弹出） -->
+  <div id="towerPick" class="hidden">
+    <div class="tp-title">选择防御塔类型 · 第 <span id="tpLayer">1</span> 层</div>
+    <div class="tp-list" id="tpList"></div>
+    <div class="tp-hint">点击即建造；按 Q/W/E/R 可用上次选择的类型快速建塔</div>
+  </div>
+  <!-- 防御塔管理（修复 / 出售） -->
+  <div id="towerAct" class="hidden">
+    <div class="ta-title" id="taTitle">防御塔</div>
+    <div class="ta-hpbar"><i id="taHpFill"></i></div>
+    <div class="ta-info" id="taInfo"></div>
+    <div class="ta-btns">
+      <button class="btn btn-gold" id="taRepair">修复</button>
+      <button class="btn btn-ghost" id="taSell">出售</button>
+      <button class="btn btn-ghost" id="taClose">关闭</button>
+    </div>
+  </div>
   <!-- 手机竖屏引导：本游戏为横屏设计 -->
   <div id="rotate" class="hidden">
     <div class="rot-card">
@@ -676,6 +726,11 @@ const AGES = [
       far:'#c39a63', mid:'#a57f49', near:'#8a6738',
       gTop:'#d3b276', gMid:'#ab8a54', gBot:'#7d6136', accent:'#e0a45e', line:'#6d5330'
   }},
+  { name:'青铜时代', icon:'⚒️', theme:{
+      skyTop:'#f0c489', skyMid:'#ffe2b4', skyBot:'#f7edd8', sun:'#fff0c6', sunX:1180, sunY:200,
+      far:'#bb8d5e', mid:'#966b41', near:'#7a5634',
+      gTop:'#cba36d', gMid:'#a47e4e', gBot:'#7a5c37', accent:'#cd7f32', line:'#5f4526'
+  }},
   { name:'城堡时代', icon:'🏰', theme:{
       skyTop:'#8fc1f7', skyMid:'#c4e0fb', skyBot:'#eef7ff', sun:'#fffbe8', sunX:340, sunY:150,
       far:'#8fb3d6', mid:'#6f97bd', near:'#4f7a5c',
@@ -685,6 +740,11 @@ const AGES = [
       skyTop:'#e08a45', skyMid:'#f0b072', skyBot:'#f6d9ac', sun:'#fff0c0', sunX:1660, sunY:250,
       far:'#8a6a5b', mid:'#6d5145', near:'#54402f',
       gTop:'#a08a5f', gMid:'#7d6a45', gBot:'#57492f', accent:'#d98a3c', line:'#463a26'
+  }},
+  { name:'工业时代', icon:'⚙️', theme:{
+      skyTop:'#8d99a6', skyMid:'#b9c3cc', skyBot:'#dde3e9', sun:'#f4f8fa', sunX:920, sunY:165,
+      far:'#7d8189', mid:'#5f646c', near:'#484d55',
+      gTop:'#8b8579', gMid:'#6d6759', gBot:'#4d4941', accent:'#d98a3c', line:'#3a3730'
   }},
   { name:'现代战争', icon:'🛡️', theme:{
       skyTop:'#5f95c9', skyMid:'#9cc0e0', skyBot:'#d9e6f2', sun:'#ffffff', sunX:1000, sunY:120,
@@ -696,7 +756,13 @@ const AGES = [
       far:'#2c2557', mid:'#221d45', near:'#191533',
       gTop:'#3a3560', gMid:'#2a2748', gBot:'#191730', accent:'#22d3ee', line:'#7c5cff'
   }},
+  { name:'星际纪元', icon:'🚀', theme:{
+      skyTop:'#070a1e', skyMid:'#101638', skyBot:'#1b2350', sun:'#9fd8ff', sunX:1480, sunY:150,
+      far:'#1c2249', mid:'#141936', near:'#0d1126',
+      gTop:'#2b3157', gMid:'#1f2444', gBot:'#12152b', accent:'#7dd3fc', line:'#8b5cf6'
+  }},
 ];
+const LAST_AGE = AGES.length - 1;
 
 /* ------------------------------ 兵种数据 ------------------------------ */
 /* rig: 绘制骨架 | weapon: 武器 | proj: 弹道类型 | splash: 溅射半径 */
@@ -709,7 +775,15 @@ const UNITS = [
     { name:'猛犸骑士', cost:85, hp:380, atk:36, rate:1.2, range:60, speed:46, scale:1.0, rig:'mammoth', weapon:'none', proj:null,
       goldKill:16, pal:{ skin:'#8a6a52', cloth:'#6b4a33', armor:'#4e3826', accent:'#d8c09a' }, desc:'重型冲阵单位，无视人墙' },
   ],
-  [ // 1 城堡时代
+  [ // 1 青铜时代
+    { name:'长矛兵', cost:33, hp:165, atk:21, rate:0.95, range:64, speed:62, scale:0.92, rig:'humanoid', weapon:'pike',
+      proj:null, goldKill:8, pal:{ skin:'#e0a97a', cloth:'#8a5a32', armor:'#cd7f32', accent:'#f0c060' }, desc:'青铜矛阵，攻守均衡' },
+    { name:'弓箭手', cost:52, hp:123, atk:26, rate:1.30, range:480, speed:58, scale:0.9, rig:'humanoid', weapon:'bow', proj:'arrow',
+      goldKill:10, pal:{ skin:'#e0a97a', cloth:'#6b7a3a', armor:'#8a6a3a', accent:'#e8d8a0' }, desc:'成排齐射，压制步兵' },
+    { name:'青铜战车', cost:111, hp:570, atk:54, rate:1.15, range:62, speed:76, scale:1.0, rig:'cavalry', weapon:'lance', proj:null,
+      goldKill:22, pal:{ skin:'#e0a97a', cloth:'#8a4a2a', armor:'#cd7f32', accent:'#f0d070' }, desc:'高速冲阵，撕开防线' },
+  ],
+  [ // 2 城堡时代
     { name:'剑盾兵', cost:35, hp:210, atk:26, rate:0.85, range:48, speed:68, scale:0.94, rig:'humanoid', weapon:'sword',
       proj:null, goldKill:8, pal:{ skin:'#e8b183', cloth:'#3f5d9c', armor:'#c8d2dd', accent:'#f0d27a' }, desc:'攻守兼备的正面主力' },
     { name:'长弓手', cost:55, hp:145, atk:30, rate:1.35, range:560, speed:58, scale:0.9, rig:'humanoid', weapon:'bow', proj:'arrow',
@@ -717,7 +791,7 @@ const UNITS = [
     { name:'重甲骑士', cost:120, hp:640, atk:62, rate:1.1, range:58, speed:74, scale:1.0, rig:'cavalry', weapon:'lance', proj:null,
       goldKill:20, pal:{ skin:'#e8b183', cloth:'#8a2f3f', armor:'#cfd8e4', accent:'#f2c85c' }, desc:'高机动重装冲锋' },
   ],
-  [ // 2 火器时代
+  [ // 3 火器时代
     { name:'火枪手', cost:70, hp:340, atk:48, rate:1.25, range:520, speed:60, scale:0.94, rig:'humanoid', weapon:'musket', proj:'bullet',
       goldKill:11, pal:{ skin:'#e0a87c', cloth:'#7a2f2f', armor:'#3f4a5c', accent:'#e8c88a' }, desc:'高伤远程，前排脆弱' },
     { name:'长枪兵', cost:60, hp:460, atk:40, rate:0.9, range:74, speed:62, scale:0.96, rig:'humanoid', weapon:'pike', proj:null,
@@ -725,7 +799,15 @@ const UNITS = [
     { name:'野战炮', cost:160, hp:320, atk:96, rate:1.9, range:680, speed:40, scale:1.0, rig:'artillery', weapon:'none', proj:'shell', splash:78,
       goldKill:25, pal:{ skin:'#8a7a5c', cloth:'#54503f', armor:'#3f3b2e', accent:'#c9a24a' }, desc:'超远溅射，攻城利器' },
   ],
-  [ // 3 现代战争
+  [ // 4 工业时代
+    { name:'刺刀步兵', cost:95, hp:500, atk:60, rate:0.92, range:120, speed:64, scale:0.96, rig:'humanoid', weapon:'rifle', proj:'bullet',
+      goldKill:16, pal:{ skin:'#dda87c', cloth:'#4a5a6a', armor:'#3f4652', accent:'#c8d4e0' }, desc:'线列步兵，刺刀突击' },
+    { name:'机枪手', cost:128, hp:400, atk:34, rate:0.28, range:470, speed:54, scale:0.94, rig:'humanoid', weapon:'gatling', proj:'bullet',
+      goldKill:20, pal:{ skin:'#dda87c', cloth:'#45503f', armor:'#5a6151', accent:'#9fb08a' }, desc:'持续扫射，压制成排敌人' },
+    { name:'装甲列车', cost:215, hp:1500, atk:175, rate:1.50, range:560, speed:42, scale:1.06, rig:'tank', weapon:'none', proj:'shell', splash:62,
+      goldKill:44, pal:{ skin:'#6b7160', cloth:'#4f5546', armor:'#3d4238', accent:'#c9a24a' }, desc:'钢铁巨兽，正面碾压' },
+  ],
+  [ // 5 现代战争
     { name:'步枪步兵', cost:105, hp:540, atk:76, rate:0.8, range:500, speed:66, scale:0.96, rig:'humanoid', weapon:'rifle', proj:'bullet',
       goldKill:15, pal:{ skin:'#dda87c', cloth:'#3d5a3a', armor:'#4a5546', accent:'#9fd08a' }, desc:'攻速快，综合能力强' },
     { name:'火箭兵', cost:135, hp:430, atk:118, rate:1.6, range:640, speed:56, scale:0.94, rig:'humanoid', weapon:'rocket', proj:'rocket', splash:72,
@@ -733,7 +815,7 @@ const UNITS = [
     { name:'主战坦克', cost:240, hp:1240, atk:155, rate:1.5, range:600, speed:44, scale:1.06, rig:'tank', weapon:'none', proj:'shell', splash:66,
       goldKill:34, pal:{ skin:'#6b7160', cloth:'#4f5546', armor:'#3d4238', accent:'#8a9a78' }, desc:'装甲怪物，正面推进' },
   ],
-  [ // 4 未来纪元
+  [ // 6 未来纪元
     { name:'等离子步兵', cost:165, hp:860, atk:132, rate:0.72, range:540, speed:70, scale:0.98, rig:'humanoid', weapon:'plasma', proj:'plasma',
       goldKill:20, pal:{ skin:'#dfb8ff', cloth:'#2b2350', armor:'#3d3070', accent:'#5eead4' }, desc:'等离子速射，穿透性强' },
     { name:'光棱卫队', cost:195, hp:760, atk:168, rate:1.05, range:660, speed:60, scale:0.98, rig:'humanoid', weapon:'prism', proj:'laser', splash:60,
@@ -741,42 +823,101 @@ const UNITS = [
     { name:'泰坦机甲', cost:380, hp:2300, atk:250, rate:1.4, range:300, speed:42, scale:1.12, rig:'mech', weapon:'none', proj:'plasma', splash:96,
       goldKill:50, pal:{ skin:'#9db4d8', cloth:'#2b3350', armor:'#404a70', accent:'#22d3ee' }, desc:'战场霸主，可摧毁一切' },
   ],
+  [ // 7 星际纪元
+    { name:'星舰陆战队', cost:250, hp:1350, atk:205, rate:0.72, range:260, speed:66, scale:0.98, rig:'humanoid', weapon:'plasma', proj:'plasma',
+      goldKill:32, pal:{ skin:'#cfe4ff', cloth:'#1d2a48', armor:'#2f4272', accent:'#38bdf8' }, desc:'轨道空降兵，速射压制' },
+    { name:'相位炮手', cost:290, hp:1150, atk:260, rate:1.00, range:720, speed:58, scale:0.98, rig:'humanoid', weapon:'prism', proj:'laser', splash:70,
+      goldKill:38, pal:{ skin:'#cfe4ff', cloth:'#2a2050', armor:'#4c3f8f', accent:'#a78bfa' }, desc:'相位光束贯穿多个目标' },
+    { name:'星际战舰', cost:520, hp:3400, atk:380, rate:1.30, range:420, speed:48, scale:1.1, rig:'ship', weapon:'none', proj:'plasma', splash:120,
+      goldKill:82, pal:{ skin:'#bcd2f0', cloth:'#1b2544', armor:'#334770', accent:'#7dd3fc' }, desc:'反重力战舰，毁灭一切' },
+  ],
 ];
 
 /* ------------------------------ 炮塔数据 ------------------------------ */
-const TURRETS = [
-  { name:'巨石投掷器', cost:80,  hp:280,  atk:19,  rate:1.60, range:520, proj:'boulder', rig:'catapult', splash:48, desc:'原始重击，落点溅射' },
-  { name:'弩炮塔',     cost:140, hp:440,  atk:34,  rate:1.35, range:560, proj:'bolt',    rig:'ballista', splash:0,  desc:'穿刺射击' },
-  { name:'加农炮台',   cost:210, hp:660,  atk:54,  rate:1.70, range:600, proj:'shell',   rig:'cannon',   splash:76, desc:'爆裂溅射' },
-  { name:'自动机枪塔', cost:320, hp:940,  atk:27,  rate:0.45, range:640, proj:'bullet',  rig:'mg',       splash:0,  desc:'高速连射' },
-  { name:'离子激光塔', cost:470, hp:1300, atk:78,  rate:1.15, range:680, proj:'laser',   rig:'laser',    splash:64, desc:'能量贯穿' },
+/* ---------------------------------------------------------------------
+   防御塔：每个时代都有 3 种定位不同的塔
+   穿刺型 = 单体高伤（克制重装）；爆破型 = 范围溅射（克制成群步兵）；速射型 = 高频压制
+   --------------------------------------------------------------------- */
+const TOWER_ARCH = [
+  { key:'pierce', tag:'穿刺', costM:1.00, atkM:1.80, rateM:0.72, rangeM:1.05, splashM:0,
+    desc:'单体高伤，专克重装与攻城单位' },
+  { key:'blast',  tag:'爆破', costM:1.15, atkM:1.10, rateM:0.85, rangeM:0.95, splashM:1.35,
+    desc:'范围溅射，成群步兵的克星' },
+  { key:'rapid',  tag:'速射', costM:1.30, atkM:0.55, rateM:2.60, rangeM:1.00, splashM:0,
+    desc:'高频压制，断兵线最稳' },
 ];
+const TOWER_BASE = [
+  { name:'巨石',   cost:80,  hp:280,  atk:19, rate:1.60, range:520, proj:'boulder', splash:48 },
+  { name:'青铜',   cost:130, hp:400,  atk:30, rate:1.35, range:560, proj:'bolt',    splash:0  },
+  { name:'石弩',   cost:190, hp:560,  atk:44, rate:1.75, range:600, proj:'boulder', splash:60 },
+  { name:'火药',   cost:260, hp:760,  atk:58, rate:1.70, range:620, proj:'shell',   splash:70 },
+  { name:'钢铁',   cost:340, hp:980,  atk:74, rate:1.60, range:650, proj:'shell',   splash:76 },
+  { name:'军械',   cost:440, hp:1200, atk:92, rate:1.50, range:690, proj:'rocket',  splash:86 },
+  { name:'离子',   cost:560, hp:1450, atk:112,rate:1.35, range:720, proj:'laser',   splash:80 },
+  { name:'相位',   cost:700, hp:1700, atk:136,rate:1.25, range:760, proj:'laser',   splash:92 },
+];
+const TOWER_RIGS = [
+  ['ballista','catapult','sling'],     // 0 石器
+  ['ballista','catapult','mg'],        // 1 青铜（连弩）
+  ['ballista','catapult','mg'],        // 2 城堡
+  ['cannon','catapult','mg'],          // 3 火器
+  ['cannon','missile','mg'],           // 4 工业
+  ['cannon','missile','mg'],           // 5 现代
+  ['laser','missile','tesla'],         // 6 未来
+  ['laser','missile','tesla'],         // 7 星际
+];
+const TOWER_PROJ = [
+  ['bolt','boulder','stone'],          // 0 石器
+  ['bolt','boulder','bolt'],           // 1 青铜
+  ['bolt','boulder','bolt'],           // 2 城堡
+  ['bolt','shell','bullet'],           // 3 火器
+  ['shell','shell','bullet'],          // 4 工业
+  ['shell','rocket','bullet'],         // 5 现代
+  ['laser','rocket','plasma'],         // 6 未来
+  ['laser','rocket','plasma'],         // 7 星际
+];
+const TURRETS = TOWER_BASE.map((b, age)=> TOWER_ARCH.map((a, ti)=> ({
+  key: a.key,
+  name: b.name + a.tag + '塔',
+  cost: Math.round(b.cost * a.costM),
+  hp: b.hp,
+  atk: Math.round(b.atk * a.atkM * 10) / 10,
+  rate: Math.round(b.rate * a.rateM * 100) / 100,
+  range: Math.round(b.range * a.rangeM),
+  proj: TOWER_PROJ[age][ti],
+  rig: TOWER_RIGS[age][ti],
+  splash: Math.round((b.splash||0) * a.splashM),
+  desc: a.desc,
+})));
 /* 塔位越高射程越远、威力越强：射程 +35/层，伤害 +5%/层 */
 function slotBonus(i){ return { range: i*35, dmg: 1 + i*0.05 }; }
 /* 层数越高造价越贵（每层 +25%），避免永远只造最高层 */
-function towerCost(age, slot){ return Math.round(TURRETS[age].cost * (1 + slot*0.25)); }
+function towerCost(age, type, slot){ return Math.round(TURRETS[age][type].cost * (1 + slot*0.25)); }
 
 /* ------------------------------ 特殊武器 ------------------------------ */
 const SPECIALS = [
-  { name:'巨石滚落', cd:44, dmg:150, hint:'滚石横扫前线' },
-  { name:'箭雨齐射', cd:44, dmg:75,  hint:'三波箭雨覆盖' },
-  { name:'炮火覆盖', cd:46, dmg:115, hint:'五发炮弹轰炸' },
-  { name:'空中支援', cd:50, dmg:150, hint:'轰炸机地毯式投弹' },
-  { name:'轨道光束', cd:54, dmg:280, hint:'三连轨道炮轰击' },
+  { type:'boulder',   name:'巨石滚落',   cd:44, dmg:150, hint:'滚石横扫前线' },
+  { type:'arrowrain', name:'箭雨齐射',   cd:44, dmg:85,  hint:'三波箭雨覆盖' },
+  { type:'barrage',   name:'投石轰炸',   cd:45, dmg:120, hint:'重型投石机覆盖打击' },
+  { type:'barrage',   name:'炮火覆盖',   cd:46, dmg:160, hint:'五发炮弹轰炸' },
+  { type:'barrage',   name:'重炮齐射',   cd:48, dmg:200, hint:'工业重炮连续轰击' },
+  { type:'airstrike', name:'空中支援',   cd:50, dmg:240, hint:'轰炸机地毯式投弹' },
+  { type:'orbital',   name:'轨道光束',   cd:54, dmg:300, hint:'三连轨道炮轰击' },
+  { type:'orbital',   name:'反物质打击', cd:58, dmg:380, hint:'相位炮饱和轰击' },
 ];
 
 /* ------------------------------ 数值平衡 ------------------------------ */
 /* 进化只由经验驱动（与原版一致），金币仅用于出兵与建造炮塔 */
 /* 进化节奏：经验需求提高、单位战斗经验收益降低，让每个时代都能打满 */
-const EVOLVE_XP   = [200, 620, 1350, 2300];
-const BASE_INCOME  = [2.7, 4.4, 7.2, 12.4, 18.0];
-const BASE_XPRATE  = [3.3, 5.2, 7.8, 11.0, 14.8];
+const EVOLVE_XP   = [160, 250, 360, 480, 620, 800, 1000];
+const BASE_INCOME  = [2.7, 3.3, 4.1, 5.2, 6.6, 8.4, 10.6, 13.4];
+const BASE_XPRATE  = [3.3, 4.3, 5.4, 6.6, 8.0, 9.6, 11.4, 13.4];
 const XP_PER_DMG   = 0.035, XP_PER_KILL = 4;
 const BASE_DMG_MUL = 2.30;  // 单位对基地的伤害加成：一旦突破就应当决出胜负
 const UNIT_CAP = 10, TURRET_SLOTS = 4, BASE_HP = 1500;
 /* 基地血量随时代增强：每进化一次基地更坚固，进化时补上新增的那部分血量 */
-const BASE_HP_BY_AGE = [1450, 1650, 1880, 2140, 2420];
-function baseHpFor(age){ return BASE_HP_BY_AGE[clamp(age|0, 0, 4)]; }
+const BASE_HP_BY_AGE = [1450, 1580, 1720, 1880, 2050, 2240, 2450, 2680];
+function baseHpFor(age){ return BASE_HP_BY_AGE[clamp(age|0, 0, LAST_AGE)]; }
 const DIFFS = {
   easy:   { name:'轻松', income:0.85, spawn:[5.0,7.6], cap:6,  eager:0.70, special:0.35, dmg:0.90 },
   normal: { name:'普通', income:1.10, spawn:[3.2,4.8], cap:9,  eager:0.95, special:0.50, dmg:1.00 },
@@ -982,10 +1123,13 @@ const Sfx = (() => {
   /* ---------- 程序化战鼓音乐 ---------- */
   const MUSIC_CFG = [
     { bpm: 82,  kick:[0,8],      tom:[4,12],      hat:[2,6,10,14], bass: 55,  wave:'sine' },
-    { bpm: 92,  kick:[0,6,8],    tom:[4,12],      hat:[2,6,10,14], bass: 62,  wave:'triangle' },
+    { bpm: 88,  kick:[0,8],      tom:[4,12],      hat:[2,6,10,14], bass: 58,  wave:'triangle' },
+    { bpm: 94,  kick:[0,6,8],    tom:[4,12],      hat:[2,6,10,14], bass: 65,  wave:'triangle' },
     { bpm: 100, kick:[0,6,8,14], tom:[4,10,12],   hat:[2,6,10,14], bass: 73,  wave:'triangle' },
-    { bpm: 110, kick:[0,4,8,12], tom:[6,14],      hat:[2,6,10,14], bass: 82,  wave:'sawtooth' },
-    { bpm: 120, kick:[0,4,8,12], tom:[6,10,14],   hat:[1,3,5,7,9,11,13,15], bass: 92, wave:'sawtooth' },
+    { bpm: 106, kick:[0,4,8,12], tom:[6,14],      hat:[2,6,10,14], bass: 78,  wave:'sawtooth' },
+    { bpm: 112, kick:[0,4,8,12], tom:[6,10,14],   hat:[2,6,10,14], bass: 87,  wave:'sawtooth' },
+    { bpm: 118, kick:[0,4,8,12], tom:[6,10,14],   hat:[1,3,5,7,9,11,13,15], bass: 92, wave:'sawtooth' },
+    { bpm: 124, kick:[0,4,8,12], tom:[6,10,14],   hat:[1,3,5,7,9,11,13,15], bass: 98, wave:'square' },
   ];
   function drum(kind, t, vol){
     if(!ready || muted || !musicEnabled) return;
@@ -1024,7 +1168,7 @@ const Sfx = (() => {
   }
   function musicSchedule(){
     if(!ready || !MUSIC.playing) return;
-    const cfg = MUSIC_CFG[Math.min(4, MUSIC.age)];
+    const cfg = MUSIC_CFG[clamp(MUSIC.age|0, 0, MUSIC_CFG.length-1)];
     const spb = 60/cfg.bpm/4;                     // 十六分音符
     while(MUSIC.next < ac.currentTime + 0.25){
       const s = MUSIC.step % 16, t = MUSIC.next;
@@ -1135,6 +1279,7 @@ const G = {
   turrets:{ p:[null,null,null,null], e:[null,null,null,null] },
   specialCd:{ p:0, e:0 }, aiming:false, aimX:W/2,
   uid:1, ai:{ think:1.2, spawnCd:3.5, specialCd:0, panic:0 },
+  towerPick:0, pickSlot:-1, actSlot:-1,
   view:{ s:1, ox:0, oy:0 },
   mouse:{ x:W/2, y:H/2, inside:false },
 };
@@ -1243,12 +1388,15 @@ function bgData(age){
   for(let i=0;i<9;i++) clouds.push({ x:R()*W, y:70+R()*250, s:0.6+R()*1.3, a:0.25+R()*0.45, sp:0.35+R()*0.9, o:R()*6 });
   const items=[];
   const kinds = [
-    ['rock','bush','rock','tuft','rock','tuft'],
-    ['tree','bush','rock','tree','tuft','bush'],
-    ['crate','rock','sandbag','wreck','crate','tuft'],
-    ['crate','wreck','pole','sandbag','crate','rock'],
-    ['neon','pole','crate','neon','rock','pole'],
-  ][age];
+    ['rock','bush','rock','tuft','rock','tuft'],       // 0 石器
+    ['rock','tuft','bush','rock','tree','tuft'],       // 1 青铜
+    ['tree','bush','rock','tree','tuft','bush'],       // 2 城堡
+    ['crate','rock','sandbag','wreck','crate','tuft'], // 3 火器
+    ['crate','pole','wreck','sandbag','rock','crate'], // 4 工业
+    ['crate','wreck','pole','sandbag','crate','rock'], // 5 现代
+    ['neon','pole','crate','neon','rock','pole'],      // 6 未来
+    ['neon','pole','neon','crate','rock','pole'],      // 7 星际
+  ][age] || ['rock','tuft'];
   for(let i=0;i<26;i++){
     const x = R()*W;
     if(Math.abs(x-P_BASE_X)<230 || Math.abs(x-E_BASE_X)<230) continue;
@@ -1419,9 +1567,9 @@ function drawBase(side, t){
   ctx.fillStyle = 'rgba(0,0,0,.30)';
   ctx.beginPath(); ctx.ellipse(0,4,150,20,0,0,7); ctx.fill();
 
-  const wallC = ['#a58a58','#c2ccd8','#8d8375','#8f9488','#4b4470'][age];
-  const roofC = ['#7d6136','#7e8b9c','#5f5647','#5d6259','#2b2547'][age];
-  const acc   = ['#c98b4a','#e8d27a','#c9a24a','#8fd0ff','#22d3ee'][age];
+  const wallC = ['#a58a58','#c9a06a','#c2ccd8','#8d8375','#8a8478','#8f9488','#4b4470','#334770'][age] || '#8f9488';
+  const roofC = ['#7d6136','#a97c3f','#7e8b9c','#5f5647','#5d5546','#5d6259','#2b2547','#1e2748'][age] || '#5d6259';
+  const acc   = ['#c98b4a','#cd7f32','#e8d27a','#c9a24a','#d98a3c','#8fd0ff','#22d3ee','#7dd3fc'][age] || '#8fd0ff';
 
   if(age===0){
     // 木栅栏
@@ -1445,6 +1593,19 @@ function drawBase(side, t){
     ctx.fillStyle = '#8a5a32'; rr(96,-108,22,110,4); ctx.fill();
     ctx.fillStyle = acc; circle(107,-92,7); ctx.fill(); circle(107,-66,7); ctx.fill();
   } else if(age===1){
+    /* 青铜时代：夯土城墙 + 熔炉 */
+    ctx.fillStyle = wallC; rr(-118,-120,236,122,6); ctx.fill();
+    ctx.fillStyle = shade(wallC,-0.18); rr(-124,-132,248,14,4); ctx.fill();
+    for(let i=-5;i<=5;i++){ ctx.fillStyle = wallC; rr(i*22-8,-152,17,22,3); ctx.fill(); }
+    ctx.fillStyle = shade(wallC,-0.26);
+    ctx.beginPath(); ctx.moveTo(-34,2); ctx.lineTo(-34,-70); ctx.quadraticCurveTo(0,-98,34,-70); ctx.lineTo(34,2); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = acc; rr(-36,-72,72,10,3); ctx.fill();
+    ctx.fillStyle = '#6b6455'; rr(58,-110,56,112,6); ctx.fill();
+    ctx.fillStyle = '#4a4437'; rr(64,-98,44,28,4); ctx.fill();
+    ctx.save(); ctx.shadowColor = acc; ctx.shadowBlur = 18; ctx.fillStyle = acc; rr(70,-92,32,13,4); ctx.fill(); ctx.restore();
+    ctx.fillStyle = acc; rr(66,-30,18,11,3); ctx.fill(); rr(90,-30,18,11,3); ctx.fill();
+    ctx.fillStyle = shade(wallC,-0.3); rr(-104,-32,32,34,4); ctx.fill();
+  } else if(age===2){
     ctx.fillStyle = wallC; rr(-120,-128,240,130,6); ctx.fill();
     ctx.fillStyle = roofC; rr(-126,-140,252,18,4); ctx.fill();
     for(let i=-5;i<=5;i++){ ctx.fillStyle=wallC; rr(i*22-8,-158,17,20,3); ctx.fill(); }
@@ -1460,7 +1621,8 @@ function drawBase(side, t){
       ctx.fillStyle = shade(wallC,0.16); ctx.fillRect(tx-4,ty+54,8,16);
     });
     ctx.fillStyle = acc; circle(0,-118,9); ctx.fill();
-  } else if(age===2){
+  } else if(age===3){
+    /* 火器时代：星形要塞 + 城防炮 */
     ctx.fillStyle = wallC; rr(-122,-120,244,122,5); ctx.fill();
     ctx.fillStyle = shade(wallC,-0.2); rr(-122,-126,244,12,4); ctx.fill();
     for(let i=-2;i<=2;i++){ ctx.fillStyle='#6b6455'; rr(i*34-13, -160, 26, 40, 3); ctx.fill(); }
@@ -1472,7 +1634,8 @@ function drawBase(side, t){
     ctx.fillStyle = '#4a463c'; circle(84,-30,15); ctx.fill();
     ctx.fillStyle = '#5a564a'; rr(70,-38,54,14,6); ctx.fill();
     ctx.fillStyle = '#3a362c'; rr(112,-35,20,9,4); ctx.fill();
-  } else if(age===3){
+  } else if(age===5){
+    /* 现代战争：混凝土基地 + 雷达 */
     ctx.fillStyle = wallC; rr(-126,-116,252,118,4); ctx.fill();
     ctx.fillStyle = shade(wallC,0.1); rr(-132,-126,264,14,3); ctx.fill();
     ctx.fillStyle = shade(wallC,-0.22); rr(-40,-96,80,98,3); ctx.fill();
@@ -1552,11 +1715,14 @@ function drawFlames(x,y,t){
 /* ---------- 炮塔 ---------- */
 /* 塔架材质随时代变化 */
 const TOWER_MAT = [
-  { leg:'#7a5c38', legDark:'#5d4426', deck:'#8a6a42', deckTop:'#a5824f', acc:'#c98b4a', glow:0 },
-  { leg:'#b9c3cf', legDark:'#8d97a5', deck:'#c2ccd8', deckTop:'#dbe3ec', acc:'#e8d27a', glow:0 },
-  { leg:'#8d8375', legDark:'#6b6455', deck:'#a09684', deckTop:'#b8ae9a', acc:'#c9a24a', glow:0 },
-  { leg:'#8f9488', legDark:'#6d7269', deck:'#9aa094', deckTop:'#b3b9ad', acc:'#8fd0ff', glow:6 },
-  { leg:'#4b4470', legDark:'#332e52', deck:'#584a9c', deckTop:'#6f5fbe', acc:'#22d3ee', glow:16 },
+  { leg:'#7a5c38', legDark:'#5d4426', deck:'#8a6a42', deckTop:'#a5824f', acc:'#c98b4a', glow:0 },   // 0 石器
+  { leg:'#8a5a32', legDark:'#6b4423', deck:'#a9743c', deckTop:'#c08b48', acc:'#cd7f32', glow:0 },   // 1 青铜
+  { leg:'#b9c3cf', legDark:'#8d97a5', deck:'#c2ccd8', deckTop:'#dbe3ec', acc:'#e8d27a', glow:0 },   // 2 城堡
+  { leg:'#8d8375', legDark:'#6b6455', deck:'#a09684', deckTop:'#b8ae9a', acc:'#c9a24a', glow:0 },   // 3 火器
+  { leg:'#7d7a72', legDark:'#5d5a54', deck:'#8f8c84', deckTop:'#a8a59c', acc:'#d98a3c', glow:3 },   // 4 工业
+  { leg:'#6b7160', legDark:'#4f5546', deck:'#7d8471', deckTop:'#969d89', acc:'#8fd0ff', glow:6 },   // 5 现代
+  { leg:'#4b4470', legDark:'#332e52', deck:'#584a9c', deckTop:'#6f5fbe', acc:'#22d3ee', glow:16 },  // 6 未来
+  { leg:'#334770', legDark:'#22304f', deck:'#3d5488', deckTop:'#4c68a8', acc:'#7dd3fc', glow:22 },  // 7 星际
 ];
 /* 竖向塔架：4 层平台堆叠在基地上方 */
 function drawTowerRig(side, t){
@@ -1623,7 +1789,7 @@ function drawTowerRig(side, t){
 }
 function drawTurret(side, slot, t){
   const o = G.turrets[side][slot]; if(!o) return;
-  const def = TURRETS[o.age];
+  const def = TURRETS[o.age][o.type];
   const sp = slotPos(side,slot), x = sp.x, y = sp.y;
   const hov = G.hoverTower === side + slot;
   ctx.save(); ctx.translate(x,y);
@@ -1650,32 +1816,56 @@ function drawTurret(side, slot, t){
   ctx.save();
   if(side==='e') ctx.scale(-1,1);
   ctx.rotate(aim); ctx.translate(-recoil*7,0);
-  drawTurretRig(def.rig, { age:o.age, side, fire:o.flash||0 });
+  drawTurretRig(def.rig, { age:o.age, side, fire:o.flash||0, spin: t*5 });
   ctx.restore();
   ctx.restore();
-  // 无敌标识（防御塔不会掉血，因此用护盾标记替代血条；只标在我方塔上，避免画面杂乱）
-  if(side==='p'){
+  // 血条：满血时半透明，掉血后高亮；被击毁前一眼可见
+  const hpR = clamp(o.hp/o.maxHp, 0, 1);
+  const bw = 68, by = y - 100;
   ctx.save();
-  ctx.globalAlpha = 0.72;
-  ctx.fillStyle = 'rgba(8,16,28,.72)'; rr(x-30, y-100, 60, 18, 9); ctx.fill();
-  ctx.strokeStyle = 'rgba(160,220,255,.55)'; ctx.lineWidth = 1.2; rr(x-30, y-100, 60, 18, 9); ctx.stroke();
-  ctx.fillStyle = '#a9e2ff'; ctx.font = '700 12px "PingFang SC","Microsoft YaHei",sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('无敌', x, y-91);
+  ctx.globalAlpha = hpR >= 0.999 ? 0.6 : 1;
+  ctx.fillStyle = 'rgba(0,0,0,.68)'; rr(x-bw/2, by, bw, 9, 4.5); ctx.fill();
+  if(hpR > 0.01){
+    ctx.fillStyle = hpR>0.55 ? '#4ade80' : (hpR>0.28 ? '#ffcf5c' : '#ff5f57');
+    rr(x-bw/2+1.5, by+1.5, (bw-3)*hpR, 6, 3); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    rr(x-bw/2+1.5, by+1.5, (bw-3)*hpR, 2.4, 1.2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = rgba(COLORS[side], 0.9); ctx.lineWidth = 1.3;
+  rr(x-bw/2, by, bw, 9, 4.5); ctx.stroke();
   ctx.restore();
+  if(o.shield > 0){                       // 受击闪光
+    ctx.save(); ctx.globalAlpha = o.shield*1.4;
+    ctx.strokeStyle = '#ffd0a0'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.ellipse(x, y-30, 52, 40, 0, 0, 7); ctx.stroke(); ctx.restore();
   }
   if(hov){
-    const back = Math.round(TURRETS[o.age].cost*SELL_RATE);
+    const back = Math.round((o.paid || TURRETS[o.age][o.type].cost) * SELL_RATE);
+    const rc = repairCostOf(side, slot);
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = '700 20px "PingFang SC","Microsoft YaHei",sans-serif';
+    ctx.font = '700 19px "PingFang SC","Microsoft YaHei",sans-serif';
     ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,.7)';
-    ctx.strokeText('点击出售 +'+back, x, y-118);
-    ctx.fillStyle = '#ffd08a'; ctx.fillText('点击出售 +'+back, x, y-118);
+    const tip = rc > 0 ? ('点击管理 · 修复🪙'+rc+' / 出售+'+back) : ('点击管理 · 出售 +'+back);
+    ctx.strokeText(tip, x, y-124);
+    ctx.fillStyle = '#ffd08a'; ctx.fillText(tip, x, y-124);
   }
 }
+/* 每个时代的塔架配色：让同一个骨架在不同时代看起来也不同 */
+const TOWER_TINT = [
+  { w:'#7a5c38', s:'#b9bfc7', m:'#6b7280' },   // 0 石器
+  { w:'#8a5a32', s:'#cd7f32', m:'#b87333' },   // 1 青铜
+  { w:'#7a5c38', s:'#c2ccd8', m:'#8d97a5' },   // 2 城堡
+  { w:'#6b5540', s:'#8d8375', m:'#4b5563' },   // 3 火器
+  { w:'#6b5a45', s:'#7d7a72', m:'#6b7280' },   // 4 工业
+  { w:'#4f5546', s:'#6b7160', m:'#4f5546' },   // 5 现代
+  { w:'#3b3568', s:'#584a9c', m:'#22d3ee' },   // 6 未来
+  { w:'#26305a', s:'#334770', m:'#7dd3fc' },   // 7 星际
+];
 function drawTurretRig(rig, o){
   const age = o.age, th = AGES[age].theme, p = o.side==='p';
-  const wood = '#7a5c38', stone='#b9bfc7', metal='#6b7280', darkm='#3f4653';
+  const tint = TOWER_TINT[clamp(age|0, 0, LAST_AGE)] || TOWER_TINT[0];
+  const wood = tint.w, stone = tint.s, metal = tint.m, darkm = shade(tint.m, -0.35);
   const team = p? '#4aa3ff':'#ff5f57';
   const fire = o.fire>0;
   if(rig==='catapult'){
@@ -1714,6 +1904,50 @@ function drawTurretRig(rig, o){
     ctx.fillStyle = '#8fd0ff'; rr(-10,-60,20,6,3); ctx.fill();
     ctx.fillStyle = team; rr(-32,-38,64,5,2); ctx.fill();
     if(fire){ ctx.fillStyle='rgba(255,240,180,.95)'; circle(64,-55,10); ctx.fill(); }
+  } else if(rig==='sling'){
+    ctx.fillStyle = wood; rr(-30,-26,60,26,4); ctx.fill();
+    ctx.fillStyle = shade(wood,-0.3); rr(-30,-9,60,9,3); ctx.fill();
+    ctx.fillStyle = darkm; circle(-18,-5,9); ctx.fill(); circle(18,-5,9); ctx.fill();
+    ctx.strokeStyle = wood; ctx.lineWidth = 7; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-20,-26); ctx.lineTo(0,-64); ctx.lineTo(20,-26); ctx.stroke();
+    ctx.fillStyle = shade(wood,0.12); rr(-4,-70,8,10,3); ctx.fill();
+    const spin = o.spin || 0;
+    ctx.save(); ctx.translate(0,-64); ctx.rotate(spin);
+    ctx.strokeStyle = '#c9a06a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-28); ctx.stroke();
+    ctx.fillStyle = shade(stone,-0.1); circle(0,-33,7.5); ctx.fill();
+    ctx.fillStyle = rgba('#ffffff',0.25); circle(-2,-35,3); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = team; rr(-30,-30,60,5,2); ctx.fill();
+  } else if(rig==='missile'){
+    ctx.fillStyle = metal; rr(-32,-32,64,32,6); ctx.fill();
+    ctx.fillStyle = darkm; rr(-32,-13,64,13,5); ctx.fill();
+    ctx.fillStyle = shade(metal,-0.18); rr(-25,-60,50,30,5); ctx.fill();
+    for(let i=0;i<4;i++){
+      ctx.fillStyle = '#2f3540'; circle(-16.5+i*11,-46,4.6); ctx.fill();
+      ctx.fillStyle = shade(metal,0.25); circle(-16.5+i*11,-46,2.5); ctx.fill();
+    }
+    ctx.fillStyle = shade(metal,-0.3); rr(8,-72,22,13,3); ctx.fill();
+    ctx.save(); ctx.translate(19,-66); ctx.rotate(Math.sin((o.spin||0))*0.7);
+    ctx.fillStyle = shade(metal,0.3); rr(-2,-3,24,6,3); ctx.fill(); ctx.restore();
+    ctx.fillStyle = team; rr(-32,-36,64,5,2); ctx.fill();
+    if(fire){ [0,1,2,3].forEach(i=>{ ctx.fillStyle='rgba(255,200,140,.9)'; circle(-16.5+i*11,-46,8); ctx.fill(); }); }
+  } else if(rig==='tesla'){
+    ctx.fillStyle = shade(tint.s,-0.15); rr(-30,-36,60,36,7); ctx.fill();
+    ctx.fillStyle = tint.s; rr(-26,-32,52,9,4); ctx.fill();
+    ctx.fillStyle = darkm; rr(-11,-68,22,34,5); ctx.fill();
+    ctx.strokeStyle = tint.m; ctx.lineWidth = 4;
+    for(let i=0;i<3;i++){ ctx.beginPath(); ctx.ellipse(0,-62-i*8, 15-i*2.5, 4.4, 0, 0, 7); ctx.stroke(); }
+    ctx.save(); ctx.shadowColor = tint.m; ctx.shadowBlur = 22;
+    ctx.fillStyle = shade(tint.m,0.35); circle(0,-78,9.5); ctx.fill();
+    ctx.fillStyle = '#ffffff'; circle(0,-78,4); ctx.fill(); ctx.restore();
+    ctx.fillStyle = team; rr(-30,-40,60,5,2); ctx.fill();
+    if(fire){
+      ctx.save(); ctx.shadowColor = tint.m; ctx.shadowBlur = 26;
+      ctx.strokeStyle = shade(tint.m,0.45); ctx.lineWidth = 3.5; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(0,-78); ctx.lineTo(26,-96); ctx.lineTo(48,-74); ctx.lineTo(66,-88); ctx.stroke();
+      ctx.restore();
+    }
   } else {
     ctx.fillStyle = '#3b3568'; rr(-32,-36,64,36,7); ctx.fill();
     ctx.fillStyle = '#584a9c'; rr(-28,-32,56,10,5); ctx.fill();
@@ -1787,6 +2021,7 @@ function drawRig(def, u, flash){
     case 'artillery':drawArtillery(def,u); break;
     case 'tank':     drawTank(def,u); break;
     case 'mech':     drawMech(def,u); break;
+    case 'ship':     drawShip(def,u); break;
   }
 }
 function teamStripe(u){
@@ -1911,6 +2146,17 @@ function drawWeaponArm(def, u, fire){
       ctx.save(); ctx.shadowColor='#c084fc'; ctx.shadowBlur=18;
       ctx.fillStyle = '#e9d5ff'; ctx.beginPath();
       ctx.moveTo(34,-12); ctx.lineTo(44,0); ctx.lineTo(34,12); ctx.lineTo(26,0); ctx.closePath(); ctx.fill(); ctx.restore(); break;
+    case 'gatling':
+      ctx.fillStyle = '#3f4652'; rr(-10,-4,28,9,3); ctx.fill();
+      for(let i=0;i<4;i++){
+        ctx.fillStyle = i%2 ? '#2f3540' : '#454b57';
+        rr(16,-4.6+i*2.5, 34, 2.4, 1.2); ctx.fill();
+      }
+      ctx.fillStyle = '#6b7280'; circle(50,0.6,5.6); ctx.fill();
+      ctx.fillStyle = '#39404b'; rr(4,3,11,12,2); ctx.fill();
+      if(mz){ ctx.fillStyle='rgba(255,215,140,.92)';
+        ctx.beginPath(); ctx.moveTo(52,-4); ctx.lineTo(68,0); ctx.lineTo(52,5); ctx.closePath(); ctx.fill(); }
+      break;
   }
   ctx.restore(); ctx.restore();
 }
@@ -2076,6 +2322,34 @@ function drawMech(def,u){
   ctx.save(); ctx.translate(-34,-132); ctx.rotate(0.15);
   ctx.fillStyle = shade(p.armor,-0.2); rr(-30,-9,34,18,6); ctx.fill(); ctx.restore();
   ctx.fillStyle = rgba(COLORS[u.side],0.9); rr(-30,-146,60,5,2); ctx.fill();
+}
+/* 星际战舰：悬浮载具，带反重力光晕与舰炮 */
+function drawShip(def,u){
+  const p = def.pal, a = u.anim;
+  const bob = Math.sin(a.phase*0.8)*3;
+  ctx.save(); ctx.translate(0, bob);
+  ctx.save(); ctx.shadowColor = p.accent; ctx.shadowBlur = 26;
+  ctx.fillStyle = rgba(p.accent, 0.45);
+  ctx.beginPath(); ctx.ellipse(0,-4,44,11,0,0,7); ctx.fill(); ctx.restore();
+  const bg = vgrad(0,-58,-12, shade(p.armor,0.32), shade(p.armor,-0.28));
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  ctx.moveTo(-54,-26); ctx.lineTo(-34,-50); ctx.lineTo(32,-54); ctx.lineTo(56,-30);
+  ctx.lineTo(38,-14); ctx.lineTo(-40,-14); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = shade(p.armor,-0.55); ctx.lineWidth = 2.2; ctx.stroke();
+  ctx.fillStyle = rgba('#ffffff',0.14); rr(-34,-50,64,5,2.5); ctx.fill();
+  // 舰桥
+  ctx.fillStyle = shade(p.cloth,0.12); rr(-18,-74,36,24,7); ctx.fill();
+  ctx.save(); ctx.shadowColor = p.accent; ctx.shadowBlur = 16;
+  ctx.fillStyle = p.accent; rr(-12,-68,24,6,3); ctx.fill(); ctx.restore();
+  // 舰炮
+  ctx.save(); ctx.translate(14,-64); ctx.rotate(-0.06 - a.swing*0.12);
+  ctx.fillStyle = shade(p.armor,0.1); rr(-6,-7,30,14,5); ctx.fill();
+  ctx.fillStyle = '#2f3540'; rr(22,-4.5,26,9,4); ctx.fill(); ctx.restore();
+  // 侧翼推进器
+  ctx.fillStyle = p.accent; rr(-42,-32,12,9,3); ctx.fill(); rr(28,-32,12,9,3); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = rgba(COLORS[u.side],0.9); rr(-30,-58,60,5,2); ctx.fill();
 }
 
 /* ---------- 子弹 / 弹道 / 特效 ---------- */
@@ -2326,11 +2600,11 @@ function getVignette(){
 
 /* ---------- HUD 图标渲染 ---------- */
 /* 图标按骨架分别定标：让 15 种单位在小卡片里大小统一、不被裁切 */
-const ICON_SCALE = { humanoid:0.82, cavalry:0.60, mammoth:0.54, artillery:0.84, tank:0.78, mech:0.46 };
-const ICON_DX    = { humanoid:-10, cavalry:-4, mammoth:14, artillery:-8, tank:0, mech:2 };
+const ICON_SCALE = { humanoid:0.82, cavalry:0.60, mammoth:0.54, artillery:0.84, tank:0.78, mech:0.46, ship:0.70 };
+const ICON_DX    = { humanoid:-10, cavalry:-4, mammoth:14, artillery:-8, tank:0, mech:2, ship:0 };
 /* 各骨架的视觉高度与血条宽度（用于头顶血条定位） */
-const BODY_H  = { humanoid:96, cavalry:132, mammoth:152, artillery:88, tank:82, mech:176 };
-const BODY_W  = { humanoid:42, cavalry:62, mammoth:84, artillery:62, tank:62, mech:74 };
+const BODY_H  = { humanoid:96, cavalry:132, mammoth:152, artillery:88, tank:82, mech:176, ship:96 };
+const BODY_W  = { humanoid:42, cavalry:62, mammoth:84, artillery:62, tank:62, mech:74, ship:104 };
 function iconSetup(canvasEl){
   const g = canvasEl.getContext('2d');
   const cw = canvasEl.width, chh = canvasEl.height;
@@ -2352,13 +2626,13 @@ function renderUnitIcon(canvasEl, age, kind){
     g.restore();
   } finally { ctx = real; }
 }
-function renderTurretIcon(canvasEl, age){
+function renderTurretIcon(canvasEl, age, type){
   const real = ctx;
   ctx = iconSetup(canvasEl);
   const g = ctx;
   try{
     g.save(); g.translate(26, 84); g.scale(0.72, 0.72);
-    drawTurretRig(TURRETS[age].rig, { age, side:'p', fire:0 });
+    drawTurretRig(TURRETS[age][type|0].rig, { age, side:'p', fire:0, spin: 0.6 });
     g.restore();
   } finally { ctx = real; }
 }
@@ -2411,12 +2685,12 @@ function shake(v){ G.shake = Math.min(22, Math.max(G.shake, v)); }
 function addXP(side, v){ const S_=stOf(side); if(S_.age<4) S_.xp += v; }
 function addGold(side, v){ stOf(side).gold += v; }
 function canEvolve(side){
-  const S_=stOf(side); if(S_.age>=4) return false;
+  const S_=stOf(side); if(S_.age>=LAST_AGE) return false;
   return S_.xp >= EVOLVE_XP[S_.age];
 }
 function evolveSide(side){
   const S_ = stOf(side);
-  if(S_.age>=4) return false;
+  if(S_.age>=LAST_AGE) return false;
   if(S_.xp < EVOLVE_XP[S_.age]) return false;
   S_.xp -= EVOLVE_XP[S_.age];
   const oldAge = S_.age; S_.age++;
@@ -2427,7 +2701,7 @@ function evolveSide(side){
   for(let i=0;i<TURRET_SLOTS;i++){
     const t = G.turrets[side][i];
     if(t && t.hp>0){
-      const oldMax = TURRETS[oldAge].hp, newDef = TURRETS[S_.age];
+      const oldMax = TURRETS[oldAge][t.type].hp, newDef = TURRETS[S_.age][t.type];
       t.hp = Math.min(newDef.hp, t.hp*(newDef.hp/oldMax) + newDef.hp*0.15);
       t.age = S_.age; t.maxHp = newDef.hp; t.cd = 0.5;
     }
@@ -2490,7 +2764,14 @@ function findTarget(u){
     if(d < -40) continue;
     if(d < bd){ bd=d; best=o; }
   }
-  /* 防御塔无敌，因此不再作为攻击目标：士兵只会与敌方部队和基地交战 */
+  /* 防御塔会挡在前线，士兵优先拆塔（塔在基地前方，天然比基地更近） */
+  for(let i=0;i<TURRET_SLOTS;i++){
+    const t = G.turrets[foe][i];
+    if(!t || t.hp<=0) continue;
+    const d = (slotX(foe,i)-u.x)*dir;
+    if(d < -20) continue;
+    if(d < bd+8){ bd=d; best = { turret:true, side:foe, slot:i, x:slotX(foe,i) }; }
+  }
   if(best) return best;
   const bx = baseX(foe);
   if((bx - u.x)*dir < 260) return { base:true, side:foe, x:bx };
@@ -2723,14 +3004,26 @@ function hurtUnit(o, dmg, fromSide){
 }
 function hurtTurret(side, slot, dmg, fromSide){
   const t = G.turrets[side][slot];
-  if(!t) return;
-  /* 防御塔是无敌的：任何攻击都只会在护盾上激起波纹，不掉血、不会被摧毁 */
-  if(t.shield < 0.4){
-    t.shield = 0.4;
+  if(!t || t.hp<=0 || dmg<=0) return;
+  t.hp -= dmg;
+  t.shield = 0.4;                       // 受击闪烁
+  addXP(fromSide, dmg*XP_PER_DMG);
+  addXP(side, dmg*XP_PER_DMG*0.5);
+  if(Math.random() < 0.35){
+    const sp0 = slotPos(side, slot);
+    spark(sp0.x, sp0.y-42, 3, '#cfe0ff', 150);
+  }
+  if(t.hp <= 0){
     const sp = slotPos(side, slot);
-    ring(sp.x, sp.y-26, '#8fd0ff', 24);
-    spark(sp.x, sp.y-40, 3, '#cfe0ff', 150);
-    Sfx.play('shield', { pan: panOf(sp.x) });
+    const def = TURRETS[t.age][t.type];
+    explode(sp.x, sp.y-28, 1.15, '#ffb43d');
+    debris(sp.x, sp.y-8, 8, '#8d8375');
+    stOf(fromSide).gold += Math.round((t.paid || def.cost) * 0.22);
+    ftext(sp.x, sp.y-116, '防御塔被摧毁', '#ff9a92', 20);
+    G.turrets[side][slot] = null;
+    dockSig = '';
+    Sfx.play('boom', { size:1.1, pan: panOf(sp.x) });
+    if(side==='p') toast('第 '+(slot+1)+' 层的「'+def.name+'」被摧毁了！','red');
   }
 }
 function hurtBase(side, dmg, fromSide){
@@ -2760,28 +3053,30 @@ function baseDestroyed(side){
 }
 
 /* ---------------- 炮塔 ---------------- */
-function tryBuildTurret(side, slot, silent){
-  const S_ = stOf(side), def = TURRETS[S_.age];
-  if(G.turrets[side][slot]){ if(side==='p'&&!silent) toast('该槽位已有炮塔','red'); return false; }
-  const cost = towerCost(S_.age, slot);
+function tryBuildTurret(side, slot, type, silent){
+  const S_ = stOf(side);
+  type = clamp(type|0, 0, TOWER_ARCH.length-1);
+  const def = TURRETS[S_.age][type];
+  if(G.turrets[side][slot]){ if(side==='p'&&!silent) toast('该层已有防御塔','red'); return false; }
+  const cost = towerCost(S_.age, type, slot);
   if(S_.gold < cost){ if(side==='p'&&!silent){ toast('金币不足（需要 🪙'+cost+'）','red'); Sfx.play('deny'); } return false; }
   S_.gold -= cost;
   G.turrets[side][slot] = {
-    age:S_.age, hp:def.hp, maxHp:def.hp, cd:0.5,
+    age:S_.age, type, hp:def.hp, maxHp:def.hp, cd:0.5,
     aim: side==='p' ? -0.45 : Math.PI+0.45, recoil:0, flash:0, paid: cost,
   };
   const bsp = slotPos(side,slot);
   puff(bsp.x, bsp.y+4, 8, '#d8cdb6');
   ring(bsp.x, bsp.y-20, '#8fd0ff', 30);
-  if(side==='p'){ Sfx.play('build', { age:S_.age, pan: panOf(bsp.x) }); toast(AGES[S_.age].name+'炮塔已部署','blue'); }
+  if(side==='p'){ Sfx.play('build', { age:S_.age, pan: panOf(bsp.x) }); toast('已部署「'+def.name+'」（第 '+(slot+1)+' 层）','blue'); }
   return true;
 }
 /* 出售炮塔：按比例回收金币（回收比例见 SELL_RATE） */
 function sellTurret(side, slot, silent){
   const t = G.turrets[side][slot];
   if(!t || t.hp<=0) return false;
-  const def = TURRETS[t.age];
-  const back = Math.round((t.paid || towerCost(t.age, slot)) * SELL_RATE);
+  const def = TURRETS[t.age][t.type];
+  const back = Math.round((t.paid || towerCost(t.age, t.type, slot)) * SELL_RATE);
   stOf(side).gold += back;
   G.turrets[side][slot] = null;
   const sp = slotPos(side, slot);
@@ -2794,7 +3089,34 @@ function sellTurret(side, slot, silent){
 }
 function sellBack(slot){
   const t = G.turrets.p[slot];
-  return t ? Math.round((t.paid || towerCost(t.age, slot)) * SELL_RATE) : 0;
+  return t ? Math.round((t.paid || towerCost(t.age, t.type, slot)) * SELL_RATE) : 0;
+}
+/* 修复：按缺失血量比例收费（修满 = 原价的 60%），有塔才能修 */
+function repairCostOf(side, slot){
+  const t = G.turrets[side][slot];
+  if(!t) return 0;
+  const def = TURRETS[t.age][t.type];
+  const miss = 1 - t.hp/t.maxHp;
+  if(miss <= 0.005) return 0;
+  return Math.max(8, Math.ceil(miss * (t.paid || def.cost) * 0.6));
+}
+function repairTurret(side, slot, silent){
+  const t = G.turrets[side][slot];
+  if(!t) return false;
+  const cost = repairCostOf(side, slot);
+  if(cost <= 0){ if(side==='p' && !silent) toast('这座塔是满血的','blue'); return false; }
+  const S_ = stOf(side);
+  if(S_.gold < cost){ if(side==='p' && !silent){ toast('金币不足，修复需要 🪙'+cost,'red'); Sfx.play('deny'); } return false; }
+  S_.gold -= cost;
+  const def = TURRETS[t.age][t.type];
+  t.hp = t.maxHp;
+  const sp = slotPos(side, slot);
+  ring(sp.x, sp.y-24, '#7ef0a4', 30);
+  ftext(sp.x, sp.y-76, '修复完成', '#9dffc8', 20);
+  Sfx.play('build', { age:t.age, pan: panOf(sp.x) });
+  dockSig = '';
+  if(side==='p' && !silent) toast('已修复「'+def.name+'」，花费 🪙'+cost,'green');
+  return true;
 }
 /* 鼠标是否悬停在（我方）塔上，用于高亮与点击出售 */
 function pickTower(wx, wy){
@@ -2811,7 +3133,7 @@ function updateTurrets(dt){
     for(let i=0;i<TURRET_SLOTS;i++){
       const t = G.turrets[side][i];
       if(!t || t.hp<=0) continue;
-      const def = TURRETS[t.age], sp = slotPos(side,i), cx = sp.x, cy = sp.y-52;
+      const def = TURRETS[t.age][t.type], sp = slotPos(side,i), cx = sp.x, cy = sp.y-52;
       const bonus = slotBonus(i);
       const range = def.range + bonus.range;
       t.cd -= dt;
@@ -2843,8 +3165,9 @@ function updateTurrets(dt){
           if(def.splash) areaDamage(best.x, side, dmg*0.35, def.splash, false);
           Sfx.play('shoot', { proj:'laser', age:t.age, pan: panOf(cx) });
         } else {
-          const speed = def.proj==='bullet'?1750:(def.proj==='bolt'?1200:(def.proj==='boulder'?560:760));
-          const grav = (def.proj==='bullet'||def.proj==='bolt')?0:900;
+          const speed = def.proj==='bullet' ? 1750 : def.proj==='bolt' ? 1200 : def.proj==='plasma' ? 900
+                      : def.proj==='boulder' ? 560 : def.proj==='rocket' ? 640 : 780;
+          const grav = (def.proj==='bullet'||def.proj==='bolt'||def.proj==='plasma') ? 0 : 900;
           const aim = leadAim(sx, sy, best.x, ty, speed, unitVelX(best), grav);
           G.shots.push({ kind: def.proj, x:sx, y:sy, vx:aim.vx, vy:aim.vy, grav, life:aim.tt+1.6,
             side, dmg, splash:def.splash||0, color:'#ffd46a', trail:0 });
@@ -2885,22 +3208,23 @@ function trySpecial(side, x){
   const mul = side==='e' ? G.difficulty.dmg : 1;
   const dmg = sp.dmg * mul;
   const dir = side==='p'?1:-1;
-  switch(age){
-    case 0:
+  const hitColor = age>=6 ? '#7dd3fc' : age>=3 ? '#ffb43d' : '#c9a06a';
+  switch(sp.type){
+    case 'boulder':
       G.specials.push({ type:'boulder', side, t:0, x: baseX(side)+dir*150, dir, rot:0, dmg, hit:new Set() });
       break;
-    case 1:
+    case 'arrowrain':
       G.specials.push({ type:'arrowrain', side, t:0, tx:x, dmg, wave:0, warn:1 });
       break;
-    case 2:
-      G.specials.push({ type:'barrage', side, t:0, tx:x, dmg, shots:0, warn:1 });
+    case 'barrage':
+      G.specials.push({ type:'barrage', side, t:0, tx:x, dmg, shots:0, warn:1, color:hitColor, count: age>=4 ? 7 : 5 });
       break;
-    case 3:
+    case 'airstrike':
       G.specials.push({ type:'airstrike', side, t:0, tx:x, dmg,
-        plane:{ x: baseX(side)-dir*120, y: 210, vx: dir*520 }, drop:0, drops:0, dropped:0 });
+        color:hitColor, plane:{ x: baseX(side)-dir*120, y: 210, vx: dir*520 }, drop:0, drops:0, dropped:0 });
       break;
-    case 4:
-      G.specials.push({ type:'orbital', side, t:0, tx:x, dmg, pulses:[], done:false });
+    case 'orbital':
+      G.specials.push({ type:'orbital', side, t:0, tx:x, dmg, pulses:[], done:false, color:hitColor, count: age>=7 ? 4 : 3 });
       break;
   }
   Sfx.play('special', { age, pan: panOf(x) });
@@ -2946,18 +3270,19 @@ function updateSpecials(dt){
         break; }
       case 'barrage': {
         sp.warn = clamp(1 - sp.t/0.9, 0, 1);
-        const marks = [0.95, 1.25, 1.55, 1.85, 2.15];
+        const n = sp.count || 5;
+        const marks = []; for(let i=0;i<n;i++) marks.push(0.95 + i*0.30);
         if(sp.shots < marks.length && sp.t >= marks[sp.shots]){
-          const off = (sp.shots-2)*54 + rand(-24,24);
+          const off = (sp.shots-(n-1)/2)*54 + rand(-24,24);
           sp.shots++;
-          G.specials.push({ type:'shellfall', side:sp.side, t:0, delay:0.55, x:clamp(sp.tx+off,120,W-120), dmg:sp.dmg, warn:1 });
+          G.specials.push({ type:'shellfall', side:sp.side, t:0, delay:0.55, x:clamp(sp.tx+off,120,W-120), dmg:sp.dmg, warn:1, color:sp.color });
         }
-        if(sp.t > 3.0) sp.done = true;
+        if(sp.t > marks[marks.length-1] + 1.2) sp.done = true;
         break; }
       case 'shellfall': {
         sp.warn = clamp(1 - sp.t/sp.delay, 0, 1);
         if(sp.t >= sp.delay){
-          explode(sp.x, GROUND-14, 1.25, '#ffb43d');
+          explode(sp.x, GROUND-14, 1.25, sp.color || '#ffb43d');
           areaDamage(sp.x, sp.side, sp.dmg, 92, false);
           Sfx.play('boom', { size:1.2, pan: panOf(sp.x) });
           sp.done = true;
@@ -2980,7 +3305,8 @@ function updateSpecials(dt){
         if(p.x < -120 || p.x > W+120) sp.done = true;
         break; }
       case 'orbital': {
-        const marks = [0.7, 1.35, 2.0];
+        const n = sp.count || 3;
+        const marks = []; for(let i=0;i<n;i++) marks.push(0.7 + i*0.65);
         if(sp.pulses.length < marks.length && sp.t >= marks[sp.pulses.length]){
           const px = sp.tx + rand(-40,40);
           sp.pulses.push({ x:px, t:0 });
@@ -3031,11 +3357,19 @@ function updateAI(dt){
   if(ai.think<=0){
     ai.think = rand(0.5,1.05);
     if(canEvolve('e') && Math.random() < 0.9*D.eager && G.e.age<4) evolveSide('e');
-    // 防御塔不会损毁，越早建收益越高：非紧急阶段有钱就补下一层
+    // 防御塔不会损毁，越早建收益越高：非紧急阶段有钱就补下一层（三种类型轮着建，攻防更均衡）
     if(ai.waveCd > 4 || S_.baseHp < S_.maxHp*0.9){
       for(let i=0;i<TURRET_SLOTS;i++){
-        if(!G.turrets.e[i] && spendable > towerCost(age, i) + 45){ tryBuildTurret('e', i, true); break; }
+        const tp = i % TOWER_ARCH.length;
+        if(!G.turrets.e[i] && spendable > towerCost(age, tp, i) + 45){ tryBuildTurret('e', i, tp, true); break; }
       }
+    }
+    // 修复受损的防御塔（比重新建造便宜）
+    for(let i=0;i<TURRET_SLOTS;i++){
+      const t = G.turrets.e[i];
+      if(!t || t.hp > t.maxHp*0.65) continue;
+      const rc = repairCostOf('e', i);
+      if(rc > 0 && S_.gold > rc + 70){ repairTurret('e', i, true); break; }
     }
   }
   // 出兵策略：兵太少时紧急补防，其余时间攒钱打「波次进攻」
@@ -3063,8 +3397,11 @@ function updateAI(dt){
       ai.specialCd = rand(5,10)/Math.max(0.4,D.special);
       const targets = G.units.filter(u=>u.side==='p' && !u.dead);
       const front = targets.filter(u=>u.x > 620);
-      // 防御塔无法被摧毁，因此特殊武器只用来清场：优先轰炸部队集群，其次压制基地前方
-      if(front.length >= 2 || (front.length>=1 && Math.random()<0.5)){
+      const myTurrets = G.turrets.p.map((t,i)=>t?i:-1).filter(i=>i>=0);
+      // 优先拆掉玩家炮塔（打破僵局），其次轰炸部队集群
+      if(myTurrets.length>=2 && Math.random()<0.5){
+        trySpecial('e', slotX('p', myTurrets[myTurrets.length-1]));
+      } else if(front.length >= 2 || (front.length>=1 && Math.random()<0.5)){
         const cx = front.reduce((a,u)=>a+u.x,0)/Math.max(1,front.length);
         trySpecial('e', cx);
       } else if(Math.random()<0.45){
@@ -3190,6 +3527,7 @@ if(typeof window!=='undefined' && window.addEventListener){
 }
 function showScreen(name){
   hidePreview();
+  closeTowerPicker(); closeTowerPanel();
   for(const id of SCR) $('#'+id).classList.add('hidden');
   $('#hud').classList.add('hidden');
   if(name==='game'){ $('#hud').classList.remove('hidden'); G.screen='game'; }
@@ -3336,8 +3674,8 @@ function guestLogin(){
 /* ---------------- HUD ---------------- */
 let dockSig = '', cardsAge = -1;
 /* ---------------- 兵种 / 炮塔预览 ---------------- */
-const PV = { kind:null, age:0, idx:0, t:0 };
-function showPreview(kind, age, idx){
+const PV = { kind:null, age:0, idx:0, type:0, t:0 };
+function showPreview(kind, age, idx, type){
   if(G.screen !== 'game' || TOUCH) return;      // 触屏没有悬停，预览面板不弹出
   PV.kind = kind; PV.age = age; PV.idx = idx;
   const info = $('#previewInfo');
@@ -3355,15 +3693,17 @@ function showPreview(kind, age, idx){
     rows.forEach(r=>info.appendChild(pvRow(r[0], r[1])));
     info.appendChild(pvDesc(d.desc + (d.splash ? ' · 溅射伤害' : '')));
   } else {
-    const d = TURRETS[age], b = slotBonus(idx);
+    const ti = clamp(type|0, 0, TOWER_ARCH.length-1);
+    PV.type = ti;
+    const d = TURRETS[age][ti], b = slotBonus(idx);
     const cost = towerCost(age, idx);
     const dps = (d.atk * b.dmg / Math.max(0.1, d.rate)).toFixed(1);
     info.appendChild(pvTitle(d.name + '（' + ['第 1 层','第 2 层','第 3 层','第 4 层'][idx] + '）'));
-    [['造价', '🪙' + cost], ['存活', '无敌 · 不可摧毁'], ['单发伤害', Math.round(d.atk * b.dmg)],
+    [['造价', '🪙' + cost], ['单发伤害', Math.round(d.atk * b.dmg)],
      ['每秒伤害', dps], ['射程', Math.round(d.range + b.range)],
      ['出售回收', '🪙' + Math.round(cost * SELL_RATE)]
     ].forEach(r=>info.appendChild(pvRow(r[0], r[1])));
-    info.appendChild(pvDesc(d.desc + (d.splash ? ' · 溅射范围 ' + d.splash : '') + ' · 层数越高越强但造价越贵'));
+    info.appendChild(pvDesc(d.desc + (d.splash ? ' · 溅射范围 ' + d.splash : '') + ' · 层数越高越强但造价越贵 · 受损可花金币修复'));
   }
   $('#preview').classList.add('on');
 }
@@ -3398,7 +3738,7 @@ function drawPreviewFrame(dt){
     drawRig(def, fake, false);
     g.restore();
   } else {
-    const def = TURRETS[PV.age];
+    const def = TURRETS[PV.age][clamp(PV.type|0, 0, TOWER_ARCH.length-1)];
     g.save(); g.translate(40, 104);
     g.scale(0.92, 0.92);
     g.rotate(Math.sin(PV.t*0.9)*0.30 - 0.42);
@@ -3435,47 +3775,121 @@ function buildCards(){
 }
 function buildDock(){
   const dock = $('#turretDock'); dock.innerHTML=''; dock.classList.add('towers');
-  const age = G.p.age, def = TURRETS[age], KEY = ['Q','W','E','R'];
+  const age = G.p.age, KEY = ['Q','W','E','R'];
+  const pick = clamp(G.towerPick|0, 0, TOWER_ARCH.length-1);
+  const cur = TURRETS[age][pick];
   const LAYER = ['第 1 层','第 2 层','第 3 层','第 4 层'];
   for(let i=0;i<TURRET_SLOTS;i++){
     const t = G.turrets.p[i];
     const bonus = slotBonus(i);
     const slot = document.createElement('div');
-    slot.className = 'bslot' + (t?' filled':'') + (!t && G.p.gold < towerCost(age, i) ? ' bad':'');
+    slot.className = 'bslot' + (t?' filled':'') + (!t && G.p.gold < towerCost(age, pick, i) ? ' bad':'');
     const key = document.createElement('div'); key.className='key'; key.textContent = KEY[i];
     slot.appendChild(key);
     const col = document.createElement('div'); col.className='col';
     if(!t){
-      const nm = document.createElement('div'); nm.className='nm'; nm.textContent = LAYER[i] + ' · 空置';
-      const cost = document.createElement('div'); cost.className='cost'; cost.textContent = '建造 🪙' + towerCost(age, i);
+      const nm = document.createElement('div'); nm.className='nm'; nm.textContent = LAYER[i] + ' · ' + cur.name;
+      const cost = document.createElement('div'); cost.className='cost'; cost.textContent = '建造 🪙' + towerCost(age, pick, i);
       const extra = document.createElement('div'); extra.className='layer';
       extra.textContent = '射程 +' + bonus.range + ' · 伤害 +' + Math.round((bonus.dmg-1)*100) + '%';
       col.appendChild(nm); col.appendChild(cost); col.appendChild(extra);
-      slot.title = def.name + '：' + def.desc;
+      slot.title = cur.name + '：' + cur.desc + '（点击选择塔类型）';
       const mob = document.createElement('div'); mob.className='mob';
-      mob.textContent = '＋' + towerCost(age, i);
+      mob.textContent = '＋' + towerCost(age, pick, i);
       slot.appendChild(mob);
     } else {
+      const tdef = TURRETS[t.age][t.type];
       const cvs = document.createElement('canvas');
       cvs.width = 84; cvs.height = 84; cvs.style.width='calc(38px*var(--k))'; cvs.style.height='calc(38px*var(--k))';
-      slot.appendChild(cvs); renderTurretIcon(cvs, t.age);
-      const nm = document.createElement('div'); nm.className='nm'; nm.textContent = TURRETS[t.age].name;
+      slot.appendChild(cvs); renderTurretIcon(cvs, t.age, t.type);
+      const nm = document.createElement('div'); nm.className='nm'; nm.textContent = tdef.name;
+      const bar = document.createElement('div'); bar.className='hpmini';
+      const fill = document.createElement('i');
+      const frac = clamp(t.hp/t.maxHp, 0, 1);
+      fill.style.width = Math.round(frac*100)+'%';
+      fill.style.background = frac>0.5 ? 'linear-gradient(90deg,#7ef0a4,#22b455)'
+                            : frac>0.25 ? 'linear-gradient(90deg,#ffd46a,#e08c14)'
+                            : 'linear-gradient(90deg,#ff9a92,#d63a2f)';
+      bar.appendChild(fill);
       const inv = document.createElement('div'); inv.className='layer';
-      inv.textContent = '无敌 · 射程 +' + bonus.range + ' · 伤害 +' + Math.round((bonus.dmg-1)*100) + '%';
-      col.appendChild(nm); col.appendChild(inv);
+      inv.textContent = 'HP ' + Math.ceil(t.hp) + '/' + t.maxHp + ' · DPS ' + (tdef.atk*(1+bonus.dmg-1)/Math.max(0.05,tdef.rate)).toFixed(0);
+      col.appendChild(nm); col.appendChild(bar); col.appendChild(inv);
       const hint = document.createElement('div'); hint.className='sellhint';
-      hint.textContent = '出售 +🪙' + sellBack(i);
+      hint.textContent = '点击管理（修复 / 出售）';
       slot.appendChild(hint);
       const mob = document.createElement('div'); mob.className='mob';
-      mob.textContent = (i+1) + '层·无敌';
+      mob.textContent = (i+1) + '层';
       slot.appendChild(mob);
     }
     slot.appendChild(col);
-    slot.onclick = ()=>{ if(G.screen!=='game') return; t ? sellTurret('p', i) : tryBuildTurret('p', i); };
-    slot.onmouseenter = ()=>showPreview('turret', t ? t.age : age, i);
+    slot.onclick = ()=>{ if(G.screen!=='game') return; t ? openTowerPanel(i) : openTowerPicker(i); };
+    slot.onmouseenter = ()=>showPreview('turret', t ? t.age : age, i, t ? t.type : pick);
     slot.onmouseleave = hidePreview;
     dock.appendChild(slot);
   }
+}
+/* 塔类型选择面板：点击空层后弹出，三选一 */
+function openTowerPicker(slot){
+  if(TOUCH && G.screen === 'game') hidePreview();
+  G.pickSlot = slot;
+  const el = $('#tpLayer'); if(el) el.textContent = String(slot+1);
+  const list = $('#tpList'); if(!list) return;
+  list.innerHTML = '';
+  for(let ti=0; ti<TOWER_ARCH.length; ti++){
+    const d = TURRETS[G.p.age][ti];
+    const cost = towerCost(G.p.age, ti, slot);
+    const card = document.createElement('div');
+    card.className = 'tp-card' + (G.p.gold < cost ? ' bad' : '') + (G.towerPick === ti ? ' on' : '');
+    const cvs = document.createElement('canvas');
+    cvs.width = 72; cvs.height = 72; cvs.style.width = '36px'; cvs.style.height = '36px';
+    const nm = document.createElement('div'); nm.className = 'tp-nm'; nm.textContent = d.name;
+    const st = document.createElement('div'); st.className = 'tp-st';
+    st.textContent = '🪙' + cost + ' · ' + (d.splash ? '溅射' : '单体');
+    const st2 = document.createElement('div'); st2.className = 'tp-st';
+    st2.textContent = 'DPS ' + (d.atk/Math.max(0.05,d.rate)).toFixed(0) + ' · 射程 ' + d.range;
+    card.appendChild(cvs); card.appendChild(nm); card.appendChild(st); card.appendChild(st2);
+    card.onclick = ()=>{ G.towerPick = ti; closeTowerPicker(); tryBuildTurret('p', slot, ti); buildDock(); syncHUD(true); };
+    card.onmouseenter = ()=>showPreview('turret', G.p.age, slot, ti);
+    card.onmouseleave = hidePreview;
+    list.appendChild(card);
+    renderTurretIcon(cvs, G.p.age, ti);
+  }
+  $('#towerPick').classList.remove('hidden');
+}
+function closeTowerPicker(){
+  G.pickSlot = -1;
+  const el = $('#towerPick'); if(el) el.classList.add('hidden');
+}
+/* 塔管理面板：显示血量与修复/出售按钮 */
+function openTowerPanel(slot){
+  const t = G.turrets.p[slot];
+  if(!t){ closeTowerPanel(); return; }
+  closeTowerPicker();
+  G.actSlot = slot;
+  const def = TURRETS[t.age][t.type], b = slotBonus(slot);
+  const rc = repairCostOf('p', slot), back = sellBack(slot);
+  const frac = clamp(t.hp/t.maxHp, 0, 1);
+  $('#taTitle').textContent = def.name + ' · 第 ' + (slot+1) + ' 层';
+  const fill = $('#taHpFill');
+  fill.style.width = Math.round(frac*100) + '%';
+  fill.style.background = frac>0.5 ? 'linear-gradient(90deg,#7ef0a4,#22b455)'
+                        : frac>0.25 ? 'linear-gradient(90deg,#ffd46a,#e08c14)'
+                        : 'linear-gradient(90deg,#ff9a92,#d63a2f)';
+  const info = $('#taInfo');
+  info.innerHTML = '';
+  const dps = (def.atk*(1+b.dmg-1)/Math.max(0.05,def.rate)).toFixed(0);
+  info.appendChild(pvRow('血量', Math.ceil(t.hp) + ' / ' + t.maxHp));
+  info.appendChild(pvRow('每秒伤害', dps + ' · 射程 ' + Math.round(def.range + b.range)));
+  info.appendChild(pvRow('特点', def.splash ? '范围溅射' : (def.key==='rapid' ? '高频压制' : '单体高伤')));
+  const rb = $('#taRepair');
+  rb.textContent = rc > 0 ? ('修复 🪙' + rc) : '已满血';
+  rb.disabled = rc <= 0 || G.p.gold < rc;
+  $('#taSell').textContent = '出售 +🪙' + back;
+  $('#towerAct').classList.remove('hidden');
+}
+function closeTowerPanel(){
+  G.actSlot = -1;
+  const el = $('#towerAct'); if(el) el.classList.add('hidden');
 }
 function syncHUD(force){
   const p = G.p, e = G.e;
@@ -3490,7 +3904,7 @@ function syncHUD(force){
   $('#hudGold').textContent = fmtN(p.gold);
   $('#hudRate').textContent = '+' + (BASE_INCOME[p.age] * (1 + Math.min(2.2, Math.max(0,(G.elapsed-300)/60)*0.35))).toFixed(1) + '/s';
   $('#hudTime').textContent = fmtT(G.elapsed);
-  if(p.age>=4){ $('#hudXpFill').style.width='100%'; $('#hudXpText').textContent='MAX'; }
+  if(p.age>=LAST_AGE){ $('#hudXpFill').style.width='100%'; $('#hudXpText').textContent='MAX'; }
   else {
     const need = EVOLVE_XP[p.age];
     $('#hudXpFill').style.width = clamp(p.xp/need,0,1)*100+'%';
@@ -3504,15 +3918,15 @@ function syncHUD(force){
     cards[k].classList.toggle('bad', p.gold < def.cost);
   }
   // 炮塔槽
-  const sig = p.age+'|'+G.turrets.p.map(t=>t?t.age:'-').join(',')+'|'+
-    G.turrets.p.map((t,i)=>t?'-':(p.gold>=towerCost(p.age,i)?1:0)).join('');
+  const sig = p.age+'|'+G.turrets.p.map(t=>t? (t.age+'x'+t.type+'x'+Math.round(t.hp/t.maxHp*10)) : '-').join(',')+'|'+
+    G.turrets.p.map((t,i)=>t?'-':(p.gold>=towerCost(p.age,G.towerPick,i)?1:0)).join('');
   if(sig!==dockSig || force){ dockSig = sig; buildDock(); }
   // 进化按钮
   const ev = $('#evolveBtn');
-  if(p.age>=4){
+  if(p.age>=LAST_AGE){
     ev.classList.remove('ready'); ev.disabled = true;
     ev.querySelector('.t').textContent = '最终时代';
-    $('#evolveSub').textContent = AGES[4].name+' · 已满级';
+    $('#evolveSub').textContent = AGES[LAST_AGE].name+' · 已满级';
     $('#evolveFill').style.width = '100%';
   } else {
     const need = EVOLVE_XP[p.age];
@@ -3542,7 +3956,7 @@ function syncHUD(force){
   let tip = '';
   if(G.aiming) tip = '点击战场任意位置释放「'+sp.name+'」 · 右键/Esc 取消';
   else if(p.age<4 && p.xp>=EVOLVE_XP[p.age]) tip = '经验已满！按 G 或点击「进化时代」进入下一时代';
-  else if(G.turrets.p.every(t=>!t) && p.gold >= towerCost(p.age,0)) tip = '在基地上方的塔架建一座防御塔稳固防线（Q/W/E/R 或点击左下角塔位）';
+  else if(G.turrets.p.every(t=>!t) && p.gold >= towerCost(p.age,G.towerPick,0)) tip = '在基地上方的塔架建防御塔（点左下角塔位选类型，或按 Q/W/E/R 直接建）';
   else if(unitCount('p')===0 && p.gold >= UNITS[p.age][0].cost) tip = '按 1 / 2 / 3 或点击兵种卡片出兵，掩护炮塔';
   else if(G.specialCd.p<=0) tip = '特殊武器「'+sp.name+'」已就绪 · 按空格释放';
   else if(p.gold < 25) tip = '金币会自动增长，击杀敌人额外获得金币';
@@ -3669,7 +4083,7 @@ function initInput(){
     }
     // 直接点击战场上的炮塔即可出售，回收金币
     const hitTower = pickTower(w.x, w.y);
-    if(ev.button===0 && hitTower){ sellTurret('p', +hitTower.slice(1)); return; }
+    if(ev.button===0 && hitTower){ openTowerPanel(+hitTower.slice(1)); return; }
     if(ev.button===2 && hitTower){ return; }
   });
   $('#pauseBtn').onclick = ()=>togglePause();
@@ -3677,13 +4091,23 @@ function initInput(){
   $('#musicBtn').onclick = toggleMusic;
   $('#pauseSound').onclick = toggleSound;
   $('#pauseMusic').onclick = toggleMusic;
+  $('#taClose').onclick = ()=>{ Sfx.play('click2'); closeTowerPanel(); };
+  $('#taRepair').onclick = ()=>{
+    if(G.actSlot < 0) return;
+    if(repairTurret('p', G.actSlot)){ buildDock(); syncHUD(true); openTowerPanel(G.actSlot); }
+  };
+  $('#taSell').onclick = ()=>{
+    if(G.actSlot < 0) return;
+    const sl = G.actSlot;
+    if(sellTurret('p', sl)){ closeTowerPanel(); buildDock(); syncHUD(true); }
+  };
   $('#helpBtn').onclick = ()=>openHelp('game');
   $('#quitBtn').onclick = ()=>{ togglePause(true); };
   document.querySelectorAll('.speedgrp .cbtn').forEach(b=>{
     b.onclick = ()=>{ G.speed = +b.dataset.spd; updateSpeedUI(); Sfx.play('click'); toast('倍速 '+G.speed+'x','blue'); };
   });
   $('#evolveBtn').onclick = ()=>{
-    if(G.p.age>=4){ toast('已经是最终时代啦','blue'); return; }
+    if(G.p.age>=LAST_AGE){ toast('已经是最终时代啦','blue'); return; }
     if(!canEvolve('p')){ toast('金币或经验不足，继续作战吧','red'); Sfx.play('deny'); return; }
     evolveSide('p'); buildCards(); syncHUD(true);
   };
@@ -3739,7 +4163,7 @@ function initInput(){
       if(k==='1'||k==='2'||k==='3'){ trySpawn('p', +k-1); return; }
       if(k==='q'||k==='w'||k==='e'||k==='r'){
         const si = 'qwer'.indexOf(k);
-        G.turrets.p[si] ? sellTurret('p', si) : tryBuildTurret('p', si);
+        G.turrets.p[si] ? openTowerPanel(si) : tryBuildTurret('p', si, G.towerPick);
         return;
       }
       if(k==='p'){ togglePause(); return; }

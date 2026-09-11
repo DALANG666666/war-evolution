@@ -634,6 +634,7 @@ html.touch .preview{display:none !important}
       <p><b>核心目标：</b>摧毁右侧的敌方基地即可获胜；我方基地被摧毁则失败。基地血量会显示在顶部，并随时代不断加固。</p>
       <ul>
         <li><b>8 个时代</b>：石器 → 青铜 → 城堡 → 火器 → 工业 → 现代 → 未来 → 星际，每个时代 3 个兵种、3 种防御塔、1 种特殊武器。</li>
+        <li><b>双方各自进化</b>：我方与敌方各有一条经验条，谁先攒满谁先进入下一个时代——所以顶部两个基地的「时代」标签<b>可能不一样</b>，这是正常的科技竞赛：领先一代就拥有明显更强的兵种与炮塔，落后方也能靠数量与炮塔防守拖回来。</li>
         <li><b>金币</b>随时间自动增长，击杀敌人也会掉落金币。金币用于出兵与建造炮塔。</li>
         <li><b>经验</b>随时间稳定增长，造成伤害、承受伤害与击杀都会额外获得经验。经验条满后点击「进化时代」，解锁更强的兵种，炮塔也会同步升级。</li>
         <li><b>波次推进</b>：攒够两个兵的金币再一起出兵，比零散送兵更容易突破防线。</li>
@@ -1296,6 +1297,7 @@ const G = {
 const S = G; // 简写
 
 /* ------------------------------ 派生工具 ------------------------------ */
+/* 双方各自进化：谁的经验先攒满谁先进入下一个时代，因此两边时代可能错开 */
 function ageOf(side){ return side==='p' ? G.p.age : G.e.age; }
 function stOf(side){ return side==='p' ? G.p : G.e; }
 function unitCap(){ return UNIT_CAP; }
@@ -2691,33 +2693,35 @@ function explode(x,y,scale,color){
 }
 function shake(v){ G.shake = Math.min(22, Math.max(G.shake, v)); }
 
-/* ---------------- 经济 / 经验 ---------------- */
-function addXP(side, v){ const S_=stOf(side); if(S_.age<4) S_.xp += v; }
+/* ---------------- 经济 / 经验 ----------------
+   每个阵营各自累积经验、各自进化；战斗经验归造成伤害/击杀的一方 */
+function addXP(side, v){ const S_=stOf(side); if(S_.age < LAST_AGE) S_.xp += v; }
 function addGold(side, v){ stOf(side).gold += v; }
 function canEvolve(side){
-  const S_=stOf(side); if(S_.age>=LAST_AGE) return false;
+  const S_=stOf(side); if(S_.age >= LAST_AGE) return false;
   return S_.xp >= EVOLVE_XP[S_.age];
 }
+/* 单方进化：该阵营进入新时代，基地加固、己方炮塔同步升级 */
 function evolveSide(side){
   const S_ = stOf(side);
-  if(S_.age>=LAST_AGE) return false;
-  if(S_.xp < EVOLVE_XP[S_.age]) return false;
-  S_.xp -= EVOLVE_XP[S_.age];
-  const oldAge = S_.age; S_.age++;
-  // 基地随时代加固：上限提高，并把新增的那部分血量直接补上
+  const age = S_.age;
+  if(age >= LAST_AGE) return false;
+  if(S_.xp < EVOLVE_XP[age]) return false;
+  S_.xp -= EVOLVE_XP[age];
+  S_.age = age + 1;
   const oldMax = S_.maxHp;
   S_.maxHp = baseHpFor(S_.age);
   S_.baseHp = Math.min(S_.maxHp, S_.baseHp + (S_.maxHp - oldMax));
   for(let i=0;i<TURRET_SLOTS;i++){
     const t = G.turrets[side][i];
     if(t && t.hp>0){
-      const oldMax = TURRETS[oldAge][t.type].hp, newDef = TURRETS[S_.age][t.type];
-      t.hp = Math.min(newDef.hp, t.hp*(newDef.hp/oldMax) + newDef.hp*0.15);
+      const oldHp = TURRETS[age][t.type].hp, newDef = TURRETS[S_.age][t.type];
+      t.hp = Math.min(newDef.hp, t.hp*(newDef.hp/oldHp) + newDef.hp*0.15);
       t.age = S_.age; t.maxHp = newDef.hp; t.cd = 0.5;
     }
   }
   for(const u of G.units){
-    if(u.side!==side || u.dead) continue;
+    if(u.dead || u.side !== side) continue;
     if(u.age < S_.age-1){ u.hp *= 0.75; u.hitFlash = 0.3; }
   }
   const bx = baseX(side);
@@ -2726,10 +2730,13 @@ function evolveSide(side){
   for(let i=0;i<26;i++) G.fx.push({ type:'shard', x:bx+rand(-60,60), y:GROUND-rand(20,190), vx:rand(-70,70), vy:rand(-160,-30),
     life:rand(0.6,1.3), max:1.3, s:rand(4,9), c:i%2?'#c084fc':'#22d3ee', grav:180, rot:rand(0,6), vr:rand(-6,6) });
   Sfx.play('evolve', { age:S_.age, pan: panOf(bx) });
-  Sfx.setAge(S_.age);
-  if(side==='p'){
+  if(side === 'p'){
+    Sfx.setAge(S_.age);
     ftext(bx, GROUND-210, '进化：'+AGES[S_.age].name, '#e9d5ff', 30);
     showEvolveFX(AGES[S_.age].name);
+  } else {
+    toast('敌方进化到「'+AGES[S_.age].name+'」','red');
+    ftext(bx, GROUND-210, '敌方进化：'+AGES[S_.age].name, '#ff9a92', 26);
   }
   return true;
 }
@@ -3366,7 +3373,7 @@ function updateAI(dt){
   const spendable = S_.gold;
   if(ai.think<=0){
     ai.think = rand(0.5,1.05);
-    if(canEvolve('e') && Math.random() < 0.9*D.eager && G.e.age<4) evolveSide('e');
+    if(canEvolve('e') && Math.random() < 0.9*D.eager) evolveSide('e');
     // 防御塔不会损毁，越早建收益越高：非紧急阶段有钱就补下一层（三种类型轮着建，攻防更均衡）
     if(ai.waveCd > 4 || S_.baseHp < S_.maxHp*0.9){
       for(let i=0;i<TURRET_SLOTS;i++){

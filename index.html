@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>战争进化史 · 时代争霸</title>
 <meta name="description" content="战争进化史 · 时代争霸：从石器时代打到未来纪元的网页战争游戏。5 个时代、15 种兵种、竖向堆叠的无敌防御塔、特殊武器与 QQ 账号绑定，打开网址即玩，无需下载。">
 <meta name="theme-color" content="#04060b">
@@ -205,6 +205,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .bslot .sellhint{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   background:rgba(8,14,26,.88);font-size:calc(12px*var(--k));font-weight:800;color:#ffd08a}
 .bslot.filled:hover .sellhint{display:flex}
+.bslot .mob{display:none;font-size:9px;font-weight:800;color:var(--gold);letter-spacing:.02em;line-height:1.1;text-align:center}
 .xpwrap{display:flex;align-items:center;gap:calc(6px*var(--k));padding:calc(5px*var(--k)) calc(11px*var(--k)) calc(5px*var(--k)) calc(8px*var(--k));
   border-radius:99px;background:var(--panel);border:1px solid var(--stroke);min-width:calc(180px*var(--k))}
 .xpwrap .ico{font-size:calc(13px*var(--k))}
@@ -341,6 +342,74 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   border:1px solid rgba(255,130,120,.65);color:#ffdcd8;font-size:calc(12.5px*var(--k));line-height:1.6;
   box-shadow:0 calc(10px*var(--k)) calc(30px*var(--k)) rgba(0,0,0,.65);cursor:pointer;word-break:break-word}
 #errBar.on{display:block}
+/* ---------- 手机竖屏引导 ---------- */
+#rotate{position:absolute;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(700px 420px at 50% 30%,#12233f 0%,transparent 65%),linear-gradient(160deg,#070b14,#04060b);
+  padding:18px}
+#rotate.hidden{display:none}
+.rot-card{width:min(360px,88vw);text-align:center;background:linear-gradient(180deg,rgba(19,27,46,.96),rgba(8,12,22,.98));
+  border:1px solid var(--stroke);border-radius:16px;padding:22px 18px;box-shadow:0 24px 60px rgba(0,0,0,.65)}
+.rot-ico{font-size:42px;line-height:1;animation:rotHint 2.6s ease-in-out infinite}
+@keyframes rotHint{0%,35%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+.rot-card h3{font-size:19px;letter-spacing:.06em;margin:12px 0 8px}
+.rot-card p{font-size:12.5px;color:#9fb4d4;line-height:1.75;margin-bottom:16px}
+.rot-card .rot-tip{font-size:11px;color:#7286a5;margin:12px 0 0}
+/* ---------- 触摸设备基础适配 ---------- */
+#cv{touch-action:none;-webkit-touch-callout:none}
+button,.ucard,.bslot{touch-action:manipulation}
+.touch-only{display:none !important}
+html.touch .touch-only{display:inline-block !important}
+html.touch .preview{display:none !important}
+/* 刘海屏安全区 */
+.wrap-top{top:calc(10px*var(--k) + env(safe-area-inset-top,0px));
+  left:calc(12px*var(--k) + env(safe-area-inset-left,0px)); right:calc(12px*var(--k) + env(safe-area-inset-right,0px))}
+.wrap-bot{bottom:calc(10px*var(--k) + env(safe-area-inset-bottom,0px));
+  left:calc(12px*var(--k) + env(safe-area-inset-left,0px)); right:calc(12px*var(--k) + env(safe-area-inset-right,0px))}
+/* ================= 小屏横屏（手机横屏 / 矮窗口）=================
+   战场世界是 2:1，地面线在 85% 高度处，手机横屏时地面下只剩约 55px，
+   因此底栏必须压进这条窄带，否则会挡住士兵。                            */
+@media (orientation: landscape) and (max-height: 560px){
+  .screen{ --k: .84; }                     /* 弹窗/菜单单独放大，保证可读可点 */
+  .login-card{ width:min(470px,76vw); }
+  .menu-card{ width:min(620px,88vw); }
+  .wrap-top{ top:calc(4px + env(safe-area-inset-top,0px)); left:calc(6px + env(safe-area-inset-left,0px)); right:calc(6px + env(safe-area-inset-right,0px)); }
+  .basecard{ min-width:0; width:25vw; max-width:190px; padding:4px 8px; gap:6px; border-radius:9px; }
+  .basecard .emblem{ width:22px; height:22px; font-size:11px; border-radius:6px; }
+  .basecard .brow{ font-size:9px; margin-bottom:2px; gap:5px; }
+  .agepill{ font-size:8.5px; padding:1px 5px; }
+  .hpbar{ height:9px; }
+  .hptext{ font-size:8px; }
+  .center-top{ gap:2px; padding-top:0; }
+  .clock{ font-size:13px; padding:2px 8px; border-radius:7px; }
+  .resbar{ gap:4px; }
+  .resp{ font-size:10.5px; padding:2px 6px; gap:3px; }
+  .resp .ico{ font-size:10px; }
+  .xpwrap{ min-width:86px; padding:2px 6px; gap:3px; }
+  .xpwrap .num{ font-size:8px; }
+  .acct-mini, .tip{ display:none; }
+  .wrap-bot{ bottom:calc(3px + env(safe-area-inset-bottom,0px)); left:calc(5px + env(safe-area-inset-left,0px)); right:calc(5px + env(safe-area-inset-right,0px));
+    justify-content:center; gap:5px; align-items:flex-end; }
+  .dock{ padding:3px; gap:4px; border-radius:9px; }
+  .dock.towers{ flex-direction:row; flex-wrap:nowrap; }
+  .bslot{ width:42px; height:50px; padding:0; border-radius:8px; flex-direction:column; align-items:center; justify-content:center; gap:1px; }
+  .bslot canvas{ width:24px; height:24px; }
+  .bslot .col, .bslot .sellhint, .bslot .key{ display:none; }
+  .bslot .mob{ display:block; }
+  .ucard{ width:70px; padding:3px 3px 4px; border-radius:10px; gap:0; }
+  .ucard canvas{ width:54px; height:38px; }
+  .ucard .nm{ font-size:9.5px; }
+  .ucard .row{ font-size:9px; gap:4px; }
+  .ucard .row .hpv{ display:none; }
+  .ucard .key{ font-size:8px; padding:0 3px; }
+  .evolve, .special{ width:74px; height:50px; border-radius:9px; }
+  .evolve .t, .special .t{ font-size:10.5px; }
+  .evolve .s, .special .s{ font-size:8.5px; }
+  .ctrl{ gap:4px; }
+  .cbtn{ min-width:32px; height:30px; font-size:11px; padding:0 6px; border-radius:8px; }
+  .cbtn.small{ min-width:30px; padding:0 5px; font-size:10.5px; }
+  .speedgrp .cbtn{ min-width:26px; }
+  .ctrl .wide-only{ display:none !important; }
+}
 </style>
 </head>
 <body>
@@ -397,9 +466,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
             <button class="cbtn small" data-spd="3">3x</button>
           </div>
           <div style="display:flex;gap:calc(6px*var(--k))">
-            <button class="cbtn small" id="soundBtn" title="音效开关">🔊</button>
-            <button class="cbtn small" id="helpBtn" title="玩法说明">❔</button>
-            <button class="cbtn small" id="quitBtn" title="返回主菜单">🏠</button>
+            <button class="cbtn small" id="soundBtn" title="音效总开关">🔊</button>
+            <button class="cbtn small wide-only" id="musicBtn" title="背景音乐开关">🎵</button>
+            <button class="cbtn small wide-only" id="helpBtn" title="玩法说明">❔</button>
+            <button class="cbtn small wide-only" id="quitBtn" title="返回主菜单">🏠</button>
           </div>
         </div>
       </div>
@@ -497,6 +567,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         <button class="btn btn-ghost" id="pauseHelpBtn">玩法说明</button>
         <button class="btn btn-ghost" id="pauseQuitBtn">返回主菜单</button>
       </div>
+      <div class="menu-actions" style="margin-top:calc(9px*var(--k))">
+        <button class="btn btn-ghost" id="pauseSound">音效：开</button>
+        <button class="btn btn-ghost" id="pauseMusic">音乐：开</button>
+        <button class="btn btn-ghost" id="pauseFs">全屏</button>
+      </div>
     </div>
   </div>
 
@@ -529,11 +604,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         <li><b>金币</b>随时间自动增长，击杀敌人也会掉落金币。金币用于出兵与建造炮塔。</li>
         <li><b>经验</b>随时间稳定增长，造成伤害、承受伤害与击杀都会额外获得经验。经验条满后点击「进化时代」，解锁更强的兵种，炮塔也会同步升级。</li>
         <li><b>波次推进</b>：攒够两个兵的金币再一起出兵，比零散送兵更容易突破防线。</li>
-        <li><b>白热化</b>：开局 6 分钟后双方金币产出会持续提升，僵持局也会被推向决战。</li>
+        <li><b>白热化</b>：开局 4 分钟后双方金币产出持续提升；若 10 分钟仍难分胜负，双方基地会被战火持续消耗，保证对局一定会收束。</li>
         <li><b>兵种</b>每代 3 种：近战、远程、重装，各有克制关系，注意前线肉盾与后排输出的搭配。</li>
         <li><b>防御塔</b>在基地上方竖向堆叠 4 层，层数越高越强但造价越贵（每层 +35 射程、+8% 伤害、+25% 造价）。<b>塔是无敌的，敌人无法摧毁</b>，只会被你的出售操作移除。塔负责守家，想推平对手要在中场先集结部队。</li>
         <li><b>出售回收</b>：点击战场上的塔，或点击左下角对应层级的塔位，即可出售并回收 <b>60%</b> 金币。</li>
-        <li><b>特殊武器</b>每代不同，冷却完毕后点击按钮，再点击战场位置释放。</li>
+        <li><b>特殊武器</b>每代不同，冷却完毕后点击按钮，再点击战场位置释放。<b>技能只杀伤敌方部队，不会破坏敌方基地</b>——要推平对手只能靠部队打到家门口。</li>
+        <li><b>基地随时代加固</b>：每进化一次，基地血量上限提升，并把新增的那部分直接补上。</li>
+        <li><b>手机游玩</b>：横屏体验最佳，竖屏会提示横屏（安卓可一键全屏并锁定横屏）；底栏会自动压缩成一条窄带，避免挡住士兵。</li>
         <li><b>士兵血条</b>：每个单位头顶都有血条，绿→黄→红表示血量，边框颜色区分敌我。</li>
       </ul>
       <table class="keys">
@@ -542,7 +619,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         <tr><td>空格</td><td>释放特殊武器（再点战场选位置）</td></tr>
         <tr><td>P 或 Esc</td><td>暂停 / 继续</td></tr>
         <tr><td>T</td><td>切换倍速 1x → 2x → 3x</td></tr>
-        <tr><td>M</td><td>音效开关</td></tr>
+        <tr><td>M / N</td><td>音效总开关 / 背景音乐开关</td></tr>
         <tr><td>G</td><td>进化时代（条件满足时）</td></tr>
       </table>
       <div class="menu-actions"><button class="btn btn-primary" id="helpCloseBtn">我知道了</button></div>
@@ -561,6 +638,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     </div>
   </div>
   <div id="errBar">⚠ 运行异常</div>
+  <!-- 手机竖屏引导：本游戏为横屏设计 -->
+  <div id="rotate" class="hidden">
+    <div class="rot-card">
+      <div class="rot-ico">📱</div>
+      <h3>请横屏游玩</h3>
+      <p>《战争进化史》是宽屏战场游戏，横过来画面才完整、操作才顺手。</p>
+      <button class="btn btn-primary" id="rotBtn">一键进入横屏全屏</button>
+      <p class="rot-tip">如果按钮没反应，请手动把手机横过来，并关闭系统的「竖屏锁定」。</p>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -658,14 +745,14 @@ const UNITS = [
 
 /* ------------------------------ 炮塔数据 ------------------------------ */
 const TURRETS = [
-  { name:'巨石投掷器', cost:80,  hp:280,  atk:26,  rate:1.55, range:520, proj:'boulder', rig:'catapult', splash:48, desc:'原始重击，落点溅射' },
-  { name:'弩炮塔',     cost:140, hp:440,  atk:50,  rate:1.30, range:560, proj:'bolt',    rig:'ballista', splash:0,  desc:'穿刺射击' },
-  { name:'加农炮台',   cost:210, hp:660,  atk:78,  rate:1.65, range:600, proj:'shell',   rig:'cannon',   splash:76, desc:'爆裂溅射' },
-  { name:'自动机枪塔', cost:320, hp:940,  atk:38,  rate:0.42, range:640, proj:'bullet',  rig:'mg',       splash:0,  desc:'高速连射' },
-  { name:'离子激光塔', cost:470, hp:1300, atk:115, rate:1.10, range:680, proj:'laser',   rig:'laser',    splash:64, desc:'能量贯穿' },
+  { name:'巨石投掷器', cost:80,  hp:280,  atk:19,  rate:1.60, range:520, proj:'boulder', rig:'catapult', splash:48, desc:'原始重击，落点溅射' },
+  { name:'弩炮塔',     cost:140, hp:440,  atk:34,  rate:1.35, range:560, proj:'bolt',    rig:'ballista', splash:0,  desc:'穿刺射击' },
+  { name:'加农炮台',   cost:210, hp:660,  atk:54,  rate:1.70, range:600, proj:'shell',   rig:'cannon',   splash:76, desc:'爆裂溅射' },
+  { name:'自动机枪塔', cost:320, hp:940,  atk:27,  rate:0.45, range:640, proj:'bullet',  rig:'mg',       splash:0,  desc:'高速连射' },
+  { name:'离子激光塔', cost:470, hp:1300, atk:78,  rate:1.15, range:680, proj:'laser',   rig:'laser',    splash:64, desc:'能量贯穿' },
 ];
-/* 塔位越高射程越远、威力越强：射程 +35/层，伤害 +8%/层 */
-function slotBonus(i){ return { range: i*35, dmg: 1 + i*0.08 }; }
+/* 塔位越高射程越远、威力越强：射程 +35/层，伤害 +5%/层 */
+function slotBonus(i){ return { range: i*35, dmg: 1 + i*0.05 }; }
 /* 层数越高造价越贵（每层 +25%），避免永远只造最高层 */
 function towerCost(age, slot){ return Math.round(TURRETS[age].cost * (1 + slot*0.25)); }
 
@@ -685,12 +772,15 @@ const EVOLVE_XP   = [200, 620, 1350, 2300];
 const BASE_INCOME  = [2.7, 4.4, 7.2, 12.4, 18.0];
 const BASE_XPRATE  = [3.3, 5.2, 7.8, 11.0, 14.8];
 const XP_PER_DMG   = 0.035, XP_PER_KILL = 4;
-const BASE_DMG_MUL = 1.60;  // 单位对基地的伤害加成：一旦突破就应当决出胜负
+const BASE_DMG_MUL = 2.30;  // 单位对基地的伤害加成：一旦突破就应当决出胜负
 const UNIT_CAP = 10, TURRET_SLOTS = 4, BASE_HP = 1500;
+/* 基地血量随时代增强：每进化一次基地更坚固，进化时补上新增的那部分血量 */
+const BASE_HP_BY_AGE = [1450, 1650, 1880, 2140, 2420];
+function baseHpFor(age){ return BASE_HP_BY_AGE[clamp(age|0, 0, 4)]; }
 const DIFFS = {
   easy:   { name:'轻松', income:0.85, spawn:[5.0,7.6], cap:6,  eager:0.70, special:0.35, dmg:0.90 },
-  normal: { name:'普通', income:1.00, spawn:[3.2,4.8], cap:9,  eager:0.95, special:0.45, dmg:1.00 },
-  hard:   { name:'困难', income:1.50, spawn:[2.0,3.0], cap:12, eager:1.20, special:0.90, dmg:1.12 },
+  normal: { name:'普通', income:1.10, spawn:[3.2,4.8], cap:9,  eager:0.95, special:0.50, dmg:1.00 },
+  hard:   { name:'困难', income:1.70, spawn:[2.0,3.0], cap:12, eager:1.20, special:0.95, dmg:1.12 },
 };
 
 /* 战场关键坐标 */
@@ -740,71 +830,297 @@ const ACCOUNT = {
   },
 };
 
-/* ------------------------------ 音效（WebAudio 合成） ------------------------------ */
+/* ------------------------------ 音效引擎 ------------------------------
+   分层合成（振荡器 + 噪声 + 滤波 + 混响）+ 随机变化 + 声像定位 + 程序化战鼓音乐
+   —— 同一种动作会根据时代/兵种/位置发出不同的声音，避免单调重复。       */
 const Sfx = (() => {
-  let ac=null, master=null, noiseBuf=null, ready=false, muted=false;
+  let ac=null, ready=false, muted=false, musicEnabled=true;
+  let master=null, sfxBus=null, musicBus=null, comp=null, noiseBuf=null, verb=null, panOK=false;
+  const MUSIC = { timer:null, step:0, next:0, age:0, intensity:0, playing:false };
+
   function init(){
     if(ready) return;
     try{
       const AC = window.AudioContext || window.webkitAudioContext;
       if(!AC) return;
       ac = new AC();
-      master = ac.createGain(); master.gain.value = 0.34; master.connect(ac.destination);
-      const len = ac.sampleRate * 1.2; noiseBuf = ac.createBuffer(1,len,ac.sampleRate);
-      const ch = noiseBuf.getChannelData(0);
-      for(let i=0;i<len;i++) ch[i] = Math.random()*2-1;
+      comp = ac.createDynamicsCompressor();
+      if(comp.threshold){
+        comp.threshold.value = -14; comp.knee.value = 26; comp.ratio.value = 4.5;
+        comp.attack.value = 0.004; comp.release.value = 0.20;
+      }
+      master   = ac.createGain(); master.gain.value = 0.50;
+      sfxBus   = ac.createGain(); sfxBus.gain.value = 1.00;
+      musicBus = ac.createGain(); musicBus.gain.value = 0.30;
+      sfxBus.connect(master); musicBus.connect(master);
+      master.connect(comp); comp.connect(ac.destination);
+      panOK = typeof ac.createStereoPanner === 'function';
+      const len = Math.floor(ac.sampleRate * 1.5);
+      noiseBuf = ac.createBuffer(1, len, ac.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for(let i=0;i<len;i++) d[i] = Math.random()*2-1;
       ready = true;
-    }catch(e){ ready=false; }
+      if(ac.state === 'suspended' && ac.resume) ac.resume().catch(()=>{});
+    }catch(e){ ready = false; }
   }
-  function tone(f, f2, dur, type, vol, delay){
-    if(!ready||muted) return;
-    const t = ac.currentTime + (delay||0);
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = type||'square'; o.frequency.setValueAtTime(f,t);
-    if(f2) o.frequency.exponentialRampToValueAtTime(Math.max(24,f2), t+dur);
-    g.gain.setValueAtTime(0.0001,t);
-    g.gain.linearRampToValueAtTime(vol,t+0.008);
-    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t+dur+0.03);
+  /* 混响：程序生成脉冲响应，给爆炸/大招加空间感 */
+  function getVerb(){
+    if(verb || !ready) return verb;
+    try{
+      const dur = 1.25, rate = ac.sampleRate, len = Math.floor(rate*dur);
+      const buf = ac.createBuffer(2, len, rate);
+      for(let c=0;c<2;c++){
+        const d = buf.getChannelData(c);
+        for(let i=0;i<len;i++){ const t = i/len; d[i] = (Math.random()*2-1)*Math.pow(1-t, 2.4); }
+      }
+      verb = ac.createConvolver(); verb.buffer = buf;
+      const vg = ac.createGain(); vg.gain.value = 0.5;
+      verb.connect(vg); vg.connect(sfxBus);
+    }catch(e){ verb = null; }
+    return verb;
   }
-  function noise(dur, vol, hp, sweep, delay){
-    if(!ready||muted||!noiseBuf) return;
-    const t = ac.currentTime + (delay||0);
-    const s = ac.createBufferSource(); s.buffer = noiseBuf;
-    const f = ac.createBiquadFilter(); f.type='lowpass';
-    f.frequency.setValueAtTime(hp||900, t);
-    if(sweep) f.frequency.exponentialRampToValueAtTime(Math.max(60,sweep), t+dur);
+  /* 输出链：增益 → 声像 → 总线（可选混响送出） */
+  function out(pan, wet, kind){
     const g = ac.createGain();
-    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+0.03);
+    let last = g;
+    if(panOK){
+      const p = ac.createStereoPanner();
+      p.pan.value = clamp(pan||0, -1, 1);
+      g.connect(p); last = p;
+    }
+    last.connect(kind==='music' ? musicBus : sfxBus);
+    if(wet && getVerb()) last.connect(verb);
+    return g;
   }
-  function play(n){
-    if(!ready||muted) return;
+  /* 振荡器层 */
+  function tone(o){
+    if(!ready || muted) return;
+    const t = ac.currentTime + (o.delay||0);
+    const osc = ac.createOscillator();
+    osc.type = o.type || 'square';
+    osc.frequency.setValueAtTime(Math.max(20, o.f), t);
+    if(o.f2) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.f2), t+o.dur);
+    let src = osc;
+    if(o.filter){
+      const f = ac.createBiquadFilter();
+      f.type = o.filter; f.frequency.value = o.fc || 900; f.Q.value = o.q || 1;
+      osc.connect(f); src = f;
+    }
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(o.vol||0.1, t+(o.attack||0.006));
+    g.gain.exponentialRampToValueAtTime(0.0001, t+o.dur);
+    src.connect(g); g.connect(out(o.pan, o.wet, o.bus));
+    osc.start(t); osc.stop(t+o.dur+0.04);
+  }
+  /* 噪声层（打击感、爆炸、摩擦） */
+  function hiss(o){
+    if(!ready || muted || !noiseBuf) return;
+    const t = ac.currentTime + (o.delay||0);
+    const s = ac.createBufferSource(); s.buffer = noiseBuf;
+    s.playbackRate.value = o.rate || 1;
+    const f = ac.createBiquadFilter();
+    f.type = o.type || 'lowpass';
+    f.frequency.setValueAtTime(o.fc || 1200, t);
+    if(o.fc2) f.frequency.exponentialRampToValueAtTime(Math.max(60, o.fc2), t+o.dur);
+    f.Q.value = o.q || 1;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(o.vol||0.1, t+(o.attack||0.004));
+    g.gain.exponentialRampToValueAtTime(0.0001, t+o.dur);
+    s.connect(f); f.connect(g); g.connect(out(o.pan, o.wet, o.bus));
+    s.start(t); s.stop(t+o.dur+0.04);
+  }
+  const V = (p)=>1+(Math.random()*2-1)*(p===undefined?0.09:p);   // 随机音高变化：同一个动作不会完全一样
+
+  /* ---------- 单位 / 武器音色（按时代区分） ---------- */
+  function melee(age, pan){
+    if(age===0){ tone({type:'sine', f:150*V(0.12), f2:52, dur:0.16, vol:0.16, pan, filter:'lowpass', fc:420});
+                 hiss({dur:0.07, vol:0.09, fc:1500, fc2:400, pan}); }
+    else if(age===1){ [1180,1820,2460].forEach((f,i)=>tone({type:'square', f:f*V(0.06), dur:0.10+i*0.02, vol:0.05, pan, delay:i*0.012}));
+                 hiss({dur:0.09, vol:0.08, type:'bandpass', fc:3000, q:2, pan}); }
+    else if(age===2){ hiss({dur:0.12, vol:0.10, type:'bandpass', fc:900, fc2:260, q:3, pan});
+                 tone({type:'triangle', f:220*V(0.1), f2:80, dur:0.13, vol:0.12, pan}); }
+    else if(age===3){ tone({type:'square', f:320*V(0.1), f2:110, dur:0.11, vol:0.11, pan, filter:'lowpass', fc:1400});
+                 hiss({dur:0.06, vol:0.10, fc:2600, fc2:700, pan}); }
+    else { tone({type:'sawtooth', f:900*V(0.08), f2:180, dur:0.14, vol:0.07, filter:'bandpass', fc:1500, q:3, pan, wet:1});
+           tone({type:'sine', f:2600*V(0.05), dur:0.08, vol:0.04, pan}); }
+  }
+  function shoot(proj, age, pan){
+    const a = (age===undefined) ? 0 : age;
+    switch(proj){
+      case 'arrow': hiss({dur:0.13, vol:0.09, type:'bandpass', fc:2600, fc2:900, q:2, pan});
+                    tone({type:'sine', f:1100*V(0.12), f2:420, dur:0.10, vol:0.05, pan}); break;
+      case 'stone': hiss({dur:0.17, vol:0.08, type:'bandpass', fc:700, fc2:1900, q:4, pan});
+                    tone({type:'triangle', f:420*V(0.15), f2:240, dur:0.09, vol:0.05, pan}); break;
+      case 'bolt':  tone({type:'square', f:520*V(0.1), f2:180, dur:0.10, vol:0.09, pan});
+                    hiss({dur:0.10, vol:0.08, type:'bandpass', fc:1800, q:3, pan}); break;
+      case 'bullet': // age2 火枪：闷响 + 白烟；age3 步枪：脆响 + 回声
+        if(a<=2){
+          hiss({dur:0.30, vol:0.20, fc:2200, fc2:180, pan, wet:1});
+          tone({type:'square', f:190*V(0.08), f2:70, dur:0.16, vol:0.11, pan});
+          hiss({dur:0.42, vol:0.05, type:'highpass', fc:3600, pan, delay:0.05});
+        } else {
+          hiss({dur:0.09, vol:0.20, fc:4200, fc2:600, pan, wet:1});
+          tone({type:'sawtooth', f:320*V(0.1), f2:90, dur:0.09, vol:0.10, pan});
+          hiss({dur:0.28, vol:0.045, type:'bandpass', fc:1500, q:1.2, pan, delay:0.055});
+        }
+        break;
+      case 'shell': hiss({dur:0.42, vol:0.24, fc:900, fc2:60, pan, wet:1});
+                    tone({type:'sine', f:130*V(0.1), f2:42, dur:0.36, vol:0.16, pan});
+                    hiss({dur:0.30, vol:0.07, type:'bandpass', fc:700, q:1.5, pan, delay:0.09}); break;
+      case 'rocket': tone({type:'sawtooth', f:180*V(0.1), f2:900, dur:0.42, vol:0.10, filter:'bandpass', fc:900, q:2, pan, wet:1});
+                    hiss({dur:0.5, vol:0.10, type:'highpass', fc:1200, fc2:2600, pan}); break;
+      case 'plasma': tone({type:'sawtooth', f:1600*V(0.1), f2:220, dur:0.16, vol:0.09, filter:'bandpass', fc:1800, q:4, pan, wet:1});
+                    tone({type:'sine', f:3200*V(0.06), f2:900, dur:0.10, vol:0.045, pan}); break;
+      case 'boulder': hiss({dur:0.26, vol:0.12, fc:600, fc2:120, pan});
+                    tone({type:'sine', f:110*V(0.12), f2:60, dur:0.22, vol:0.12, pan}); break;
+      case 'laser': tone({type:'sine', f:900*V(0.08), f2:2800, dur:0.09, vol:0.07, pan});
+                    tone({type:'sawtooth', f:2400*V(0.06), f2:600, dur:0.13, vol:0.05, filter:'bandpass', fc:2200, q:5, pan, wet:1}); break;
+    }
+  }
+  /* ---------- 程序化战鼓音乐 ---------- */
+  const MUSIC_CFG = [
+    { bpm: 82,  kick:[0,8],      tom:[4,12],      hat:[2,6,10,14], bass: 55,  wave:'sine' },
+    { bpm: 92,  kick:[0,6,8],    tom:[4,12],      hat:[2,6,10,14], bass: 62,  wave:'triangle' },
+    { bpm: 100, kick:[0,6,8,14], tom:[4,10,12],   hat:[2,6,10,14], bass: 73,  wave:'triangle' },
+    { bpm: 110, kick:[0,4,8,12], tom:[6,14],      hat:[2,6,10,14], bass: 82,  wave:'sawtooth' },
+    { bpm: 120, kick:[0,4,8,12], tom:[6,10,14],   hat:[1,3,5,7,9,11,13,15], bass: 92, wave:'sawtooth' },
+  ];
+  function drum(kind, t, vol){
+    if(!ready || muted || !musicEnabled) return;
+    const g = ac.createGain();
+    let last = g;
+    if(panOK){ const p = ac.createStereoPanner(); p.pan.value = kind==='hat' ? 0.35 : 0; g.connect(p); last = p; }
+    last.connect(musicBus);
+    if(kind==='kick'){
+      const o = ac.createOscillator(); o.type='sine';
+      o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(44, t+0.18);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+      o.connect(g); o.start(t); o.stop(t+0.24);
+    } else if(kind==='tom'){
+      const o = ac.createOscillator(); o.type='triangle';
+      o.frequency.setValueAtTime(210, t); o.frequency.exponentialRampToValueAtTime(96, t+0.16);
+      g.gain.setValueAtTime(vol*0.85, t); g.gain.exponentialRampToValueAtTime(0.0001, t+0.20);
+      o.connect(g); o.start(t); o.stop(t+0.22);
+      const s = ac.createBufferSource(); s.buffer = noiseBuf;
+      const f = ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1200; f.Q.value=1.2;
+      const ng = ac.createGain(); ng.gain.setValueAtTime(vol*0.3, t); ng.gain.exponentialRampToValueAtTime(0.0001, t+0.12);
+      s.connect(f); f.connect(ng); ng.connect(last); s.start(t); s.stop(t+0.14);
+    } else if(kind==='hat'){
+      const s = ac.createBufferSource(); s.buffer = noiseBuf;
+      const f = ac.createBiquadFilter(); f.type='highpass'; f.frequency.value=6500;
+      g.gain.setValueAtTime(vol*0.35, t); g.gain.exponentialRampToValueAtTime(0.0001, t+0.05);
+      s.connect(f); f.connect(g); s.start(t); s.stop(t+0.06);
+    } else if(kind==='bass'){
+      const o = ac.createOscillator(); o.type = MUSIC_CFG[MUSIC.age].wave;
+      o.frequency.setValueAtTime(MUSIC_CFG[MUSIC.age].bass, t);
+      const f = ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=420; f.Q.value=2;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(vol*0.8, t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.85);
+      o.connect(f); f.connect(g); o.start(t); o.stop(t+0.9);
+    }
+  }
+  function musicSchedule(){
+    if(!ready || !MUSIC.playing) return;
+    const cfg = MUSIC_CFG[Math.min(4, MUSIC.age)];
+    const spb = 60/cfg.bpm/4;                     // 十六分音符
+    while(MUSIC.next < ac.currentTime + 0.25){
+      const s = MUSIC.step % 16, t = MUSIC.next;
+      if(cfg.kick.indexOf(s) >= 0) drum('kick', t, 0.26);
+      if(cfg.tom.indexOf(s) >= 0) drum('tom', t, MUSIC.intensity>0.4 ? 0.22 : 0.15);
+      if(cfg.hat.indexOf(s) >= 0 && MUSIC.intensity > 0.25) drum('hat', t, 0.5);
+      if(s === 0) drum('bass', t, 0.16);
+      if(MUSIC.intensity > 0.6 && s === 12) drum('tom', t, 0.18);
+      MUSIC.step++; MUSIC.next += spb;
+    }
+  }
+  function musicStart(age){
+    if(!ready) return;
+    MUSIC.age = age|0; MUSIC.step = 0; MUSIC.next = ac.currentTime + 0.1; MUSIC.playing = true;
+    if(!MUSIC.timer) MUSIC.timer = setInterval(musicSchedule, 60);
+  }
+  function musicStop(){
+    MUSIC.playing = false;
+    if(MUSIC.timer){ clearInterval(MUSIC.timer); MUSIC.timer = null; }
+  }
+
+  /* ---------- 主要音效表 ---------- */
+  function play(n, opt){
+    if(!ready || muted) return;
+    opt = opt || {};
+    const pan = opt.pan || 0, age = opt.age || 0, size = opt.size || 1;
     switch(n){
-      case 'click':   tone(620,760,0.06,'square',0.05); break;
-      case 'spawn':   tone(300,560,0.13,'triangle',0.13); break;
-      case 'deny':    tone(180,120,0.16,'sawtooth',0.09); break;
-      case 'coin':    tone(920,0,0.07,'triangle',0.07); tone(1320,0,0.10,'triangle',0.05,0.06); break;
-      case 'hit':     tone(200,110,0.06,'square',0.06); noise(0.06,0.05,1800,400); break;
-      case 'clash':   tone(420,180,0.08,'sawtooth',0.05); noise(0.08,0.06,2600,600); break;
-      case 'arrow':   noise(0.12,0.06,3200,900); tone(900,320,0.10,'sine',0.05); break;
-      case 'gun':     noise(0.09,0.13,2600,300); tone(240,90,0.07,'square',0.08); break;
-      case 'cannon':  noise(0.42,0.20,900,80); tone(160,48,0.35,'sawtooth',0.12); break;
-      case 'laser':   tone(1500,240,0.20,'sawtooth',0.09); tone(2200,900,0.10,'sine',0.05); break;
-      case 'boom':    noise(0.60,0.26,1100,60); tone(120,40,0.5,'sawtooth',0.13); break;
-      case 'tower':   tone(340,240,0.16,'triangle',0.14); tone(680,520,0.12,'square',0.05,0.05); break;
-      case 'evolve':  [0,1,2,3].forEach(i=>tone([523,659,784,1046][i],0,0.30,'triangle',0.13,i*0.10)); break;
-      case 'special': tone(120,1500,0.5,'sawtooth',0.12); noise(0.5,0.14,2400,200); break;
-      case 'win':     [523,659,784,1046,1318].forEach((f,i)=>tone(f,0,0.42,'triangle',0.15,i*0.15)); break;
-      case 'lose':    [523,415,330,247].forEach((f,i)=>tone(f,0,0.5,'sine',0.15,i*0.20)); break;
-      case 'hitbase': noise(0.5,0.22,700,60); tone(90,44,0.5,'sawtooth',0.10); break;
+      case 'click':   tone({type:'square', f:660*V(0.07), f2:900, dur:0.045, vol:0.045, pan}); break;
+      case 'click2':  tone({type:'triangle', f:880*V(0.06), f2:1180, dur:0.05, vol:0.035, pan}); break;
+      case 'deny':    tone({type:'sawtooth', f:200*V(0.05), f2:130, dur:0.15, vol:0.08, filter:'lowpass', fc:800}); 
+                      tone({type:'square', f:150, f2:96, dur:0.16, vol:0.05, delay:0.09}); break;
+      case 'coin':    tone({type:'triangle', f:940*V(0.05), dur:0.06, vol:0.06, pan});
+                      tone({type:'triangle', f:1420*V(0.05), dur:0.10, vol:0.045, delay:0.055, pan});
+                      hiss({dur:0.04, vol:0.03, type:'highpass', fc:6000, pan}); break;
+      case 'spawn':   // 出兵号令：按时代给出不同音色
+        if(age<=1){ tone({type:'triangle', f:300*V(0.06), f2:560, dur:0.16, vol:0.10, pan}); }
+        else if(age===2){ tone({type:'sawtooth', f:260*V(0.05), f2:430, dur:0.16, vol:0.08, filter:'lowpass', fc:1200, pan});
+                          hiss({dur:0.09, vol:0.05, fc:2600, fc2:900, pan}); }
+        else if(age===3){ tone({type:'square', f:760*V(0.04), dur:0.05, vol:0.05, pan}); tone({type:'square', f:1180, dur:0.05, vol:0.04, delay:0.07, pan}); }
+        else { tone({type:'sine', f:520*V(0.05), f2:1500, dur:0.18, vol:0.07, pan, wet:1}); }
+        break;
+      case 'melee':   melee(age, pan); break;
+      case 'hurt':    tone({type:'triangle', f:260*V(0.12), f2:150, dur:0.09, vol:0.06, pan, filter:'lowpass', fc:900});
+                      hiss({dur:0.06, vol:0.05, type:'bandpass', fc:800, q:2, pan}); break;
+      case 'die':     tone({type:'sawtooth', f:300*V(0.1), f2:70, dur:0.26, vol:0.07, filter:'lowpass', fc:700, pan});
+                      hiss({dur:0.20, vol:0.07, fc:1100, fc2:220, pan}); break;
+      case 'shoot':   shoot(opt.proj, age, pan); break;
+      case 'boom':    hiss({dur:0.55*size, vol:0.22*Math.min(size,1.6), fc:1100, fc2:60, pan, wet:1});
+                      tone({type:'sine', f:120*V(0.1), f2:36, dur:0.5*size, vol:0.15*Math.min(size,1.4), pan});
+                      hiss({dur:0.35, vol:0.06, type:'bandpass', fc:2600, q:1, pan, delay:0.06}); break;
+      case 'shield':  tone({type:'sine', f:1600*V(0.05), f2:2600, dur:0.13, vol:0.05, pan});
+                      tone({type:'sine', f:2400*V(0.04), dur:0.18, vol:0.035, pan, delay:0.02, wet:1}); break;
+      case 'build':   // 建造：锤击 + 材质
+        [0,0.11,0.24].forEach((d,i)=>tone({type:'triangle', f:(age>=3?420:300)*V(0.08), f2:(age>=3?150:120), dur:0.10, vol:0.09-i*0.015, delay:d, pan}));
+        hiss({dur:0.14, vol:0.05, type:'bandpass', fc:age>=4?3600:1800, q:2, pan}); break;
+      case 'sell':    [0,1,2].forEach(i=>tone({type:'triangle', f:(900+220*i)*V(0.04), dur:0.09, vol:0.045, delay:i*0.05, pan}));
+                      hiss({dur:0.16, vol:0.05, fc:1600, fc2:400, pan}); break;
+      case 'tower':   tone({type:'triangle', f:360*V(0.05), f2:240, dur:0.14, vol:0.10, pan});
+                      hiss({dur:0.12, vol:0.05, fc:1400, fc2:500, pan}); break;
+      case 'special': // 特殊武器：按时代不同
+        if(age===0){ hiss({dur:0.7, vol:0.14, fc:700, fc2:120, pan, wet:1}); tone({type:'sine', f:90, f2:50, dur:0.6, vol:0.12, pan}); }
+        else if(age===1){ [0,0.08,0.16,0.24].forEach(i=>tone({type:'sine', f:1500*V(0.08), f2:600, dur:0.14, vol:0.05, delay:i, pan, wet:1})); }
+        else if(age===2){ hiss({dur:0.5, vol:0.18, fc:1000, fc2:70, pan, wet:1}); tone({type:'sine', f:110, f2:40, dur:0.45, vol:0.14, pan}); }
+        else if(age===3){ tone({type:'sawtooth', f:120*V(0.08), f2:640, dur:0.55, vol:0.11, filter:'bandpass', fc:700, q:2, pan, wet:1});
+                          hiss({dur:0.7, vol:0.10, type:'highpass', fc:900, fc2:2400, pan}); }
+        else { tone({type:'sawtooth', f:1800*V(0.05), f2:180, dur:0.5, vol:0.10, filter:'bandpass', fc:1600, q:4, pan, wet:1});
+               tone({type:'sine', f:3200, f2:900, dur:0.35, vol:0.05, delay:0.05, pan, wet:1}); }
+        break;
+      case 'ready':   [0,1].forEach(i=>tone({type:'sine', f:(1320+i*520)*V(0.03), dur:0.16, vol:0.05, delay:i*0.10, pan:0.25, wet:1})); break;
+      case 'horn':    // 敌方进攻预警：低沉号角
+        tone({type:'sawtooth', f:150, f2:170, dur:0.75, vol:0.10, filter:'lowpass', fc:700, pan, wet:1});
+        tone({type:'sawtooth', f:226, dur:0.7, vol:0.06, delay:0.05, filter:'lowpass', fc:800, pan, wet:1}); break;
+      case 'alarm':   [0,0.22,0.44].forEach(i=>tone({type:'square', f:i%0.44?700:520, dur:0.16, vol:0.05, delay:i, pan:0.4})); break;
+      case 'hitbase': hiss({dur:0.55, vol:0.20, fc:800, fc2:70, pan, wet:1});
+                      tone({type:'sine', f:96*V(0.06), f2:44, dur:0.5, vol:0.13, pan}); break;
+      case 'evolve':  // 进化：低频推进 + 上行琶音 + 闪光
+        tone({type:'sine', f:70, f2:140, dur:0.9, vol:0.10, wet:1});
+        [523,659,784,1046,1318].forEach((f,i)=>tone({type:'triangle', f:f*V(0.02), dur:0.42, vol:0.11, delay:0.06+i*0.085, wet:1}));
+        hiss({dur:0.7, vol:0.05, type:'highpass', fc:3000, fc2:7000, delay:0.1}); break;
+      case 'win':     [523,659,784,1046,1318,1568].forEach((f,i)=>tone({type:'triangle', f, dur:0.45, vol:0.12, delay:i*0.14, wet:1}));
+                      [131,196,262].forEach((f,i)=>tone({type:'sine', f, dur:0.7, vol:0.10, delay:i*0.28}));
+                      hiss({dur:1.1, vol:0.05, type:'highpass', fc:4000, delay:0.1}); break;
+      case 'lose':    [523,466,392,311,247].forEach((f,i)=>tone({type:'sine', f, dur:0.55, vol:0.13, delay:i*0.20, wet:1}));
+                      tone({type:'sawtooth', f:110, f2:55, dur:1.4, vol:0.08, filter:'lowpass', fc:500}); break;
     }
   }
   return {
     init, play,
     isMuted(){ return muted; },
-    setMuted(v){ muted=!!v; if(master) master.gain.value = muted?0:0.34; },
-    toggle(){ muted=!muted; if(master) master.gain.value = muted?0:0.34; return muted; },
+    setMuted(v){ muted=!!v; if(master) master.gain.value = muted?0:0.50; },
+    toggle(){ muted=!muted; if(master) master.gain.value = muted?0:0.50; if(!muted) init(); return muted; },
+    isMusicOn(){ return musicEnabled; },
+    toggleMusic(){ musicEnabled = !musicEnabled; if(musicBus) musicBus.gain.value = musicEnabled?0.30:0; return musicEnabled; },
+    musicStart, musicStop,
+    setAge(a){ MUSIC.age = (a|0); },
+    setIntensity(v){ MUSIC.intensity = clamp(v,0,1); },
   };
 })();
 
@@ -833,6 +1149,8 @@ function slotX(side,i){ return baseX(side) + (side==='p'? 1 : -1) * TOWER_OFF; }
 function slotPos(side,i){ return { x: slotX(side,i), y: TOWER_SLOT_Y[i] }; }
 function baseX(side){ return side==='p' ? P_BASE_X : E_BASE_X; }
 function spawnX(side){ return side==='p' ? P_SPAWN : E_SPAWN; }
+/* 声像定位：战场左侧的声音偏左耳，右侧偏右耳 */
+function panOf(x){ return clamp(((x/W)*2 - 1) * 0.85, -1, 1); }
 /* =====================================================================
    渲染层：程序化绘制场景 / 城堡 / 单位 / 炮塔 / 特效
    ===================================================================== */
@@ -841,16 +1159,45 @@ let ctx = cv.getContext('2d');          // 会被临时切换到离屏画布用�
 const stageEl = $('#stage');
 let DPR = 1;
 
+/* 触摸设备判定（手机/平板）：用于横屏引导、隐藏悬停功能、限制像素比 */
+const TOUCH = (typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
+if(TOUCH && document.documentElement.classList) document.documentElement.classList.add('touch');
+
 function layout(){
   const vw = innerWidth, vh = innerHeight;
-  DPR = Math.min(2.5, window.devicePixelRatio || 1);
+  DPR = Math.min(TOUCH ? 2 : 2.5, window.devicePixelRatio || 1);
   const s = Math.min(vw/W, vh/H);
   const sw = Math.round(W*s), sh = Math.round(H*s);
   stageEl.style.width = sw+'px'; stageEl.style.height = sh+'px';
   stageEl.style.left = Math.round((vw-sw)/2)+'px'; stageEl.style.top = Math.round((vh-sh)/2)+'px';
   cv.width = Math.round(sw*DPR); cv.height = Math.round(sh*DPR);
   G.view.s = s;
-  stageEl.style.setProperty('--k', clamp(s*1.02, 0.6, 1.3).toFixed(3));
+  stageEl.style.setProperty('--k', clamp(s*1.02, TOUCH?0.46:0.6, 1.3).toFixed(3));
+  updateRotateOverlay();
+}
+/* 手机竖屏时提示横屏；面板（登录/菜单/弹窗）不拦截 */
+function updateRotateOverlay(){
+  const el = $('#rotate');
+  if(!el) return;
+  const portrait = innerHeight > innerWidth * 1.02;
+  const small = Math.min(innerWidth, innerHeight) <= 900;
+  const show = TOUCH && portrait && small && G.screen === 'game';
+  el.classList.toggle('hidden', !show);
+}
+/* 一键进入横屏全屏（安卓 Chrome 支持方向锁定；iOS 需手动旋转） */
+async function enterLandscape(){
+  try{
+    const de = document.documentElement;
+    if(!document.fullscreenElement){
+      if(de.requestFullscreen) await de.requestFullscreen({ navigationUI:'hide' });
+      else if(de.webkitRequestFullscreen) de.webkitRequestFullscreen();
+    }
+  }catch(e){}
+  try{
+    if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape');
+  }catch(e){}
+  setTimeout(layout, 120);
+  setTimeout(layout, 600);
 }
 function toWorld(ev){
   const r = stageEl.getBoundingClientRect();
@@ -2073,6 +2420,10 @@ function evolveSide(side){
   if(S_.xp < EVOLVE_XP[S_.age]) return false;
   S_.xp -= EVOLVE_XP[S_.age];
   const oldAge = S_.age; S_.age++;
+  // 基地随时代加固：上限提高，并把新增的那部分血量直接补上
+  const oldMax = S_.maxHp;
+  S_.maxHp = baseHpFor(S_.age);
+  S_.baseHp = Math.min(S_.maxHp, S_.baseHp + (S_.maxHp - oldMax));
   for(let i=0;i<TURRET_SLOTS;i++){
     const t = G.turrets[side][i];
     if(t && t.hp>0){
@@ -2090,7 +2441,8 @@ function evolveSide(side){
   flashAt(bx, GROUND-90, '#a78bfa', 60);
   for(let i=0;i<26;i++) G.fx.push({ type:'shard', x:bx+rand(-60,60), y:GROUND-rand(20,190), vx:rand(-70,70), vy:rand(-160,-30),
     life:rand(0.6,1.3), max:1.3, s:rand(4,9), c:i%2?'#c084fc':'#22d3ee', grav:180, rot:rand(0,6), vr:rand(-6,6) });
-  Sfx.play('evolve');
+  Sfx.play('evolve', { age:S_.age, pan: panOf(bx) });
+  Sfx.setAge(S_.age);
   if(side==='p'){
     ftext(bx, GROUND-210, '进化：'+AGES[S_.age].name, '#e9d5ff', 30);
     showEvolveFX(AGES[S_.age].name);
@@ -2121,7 +2473,7 @@ function trySpawn(side, kind, silent){
   };
   G.units.push(u);
   puff(u.x, GROUND+u.yOff-10, 5, '#d8cdb6');
-  if(side==='p') Sfx.play('spawn');
+  if(side==='p') Sfx.play('spawn', { age:S_.age, pan: panOf(u.x) });
   return true;
 }
 function tgtX(t){
@@ -2218,7 +2570,7 @@ function strike(u, tgt){
     else hurtUnit(tgt, dmg, u.side);
     const hx = tgtX(tgt) - dir*6, hy = GROUND + (tgt.yOff||0) - 44;
     spark(hx, hy, 4, '#ffe9a8', 150);
-    if(Math.random()<0.5) Sfx.play(Math.random()<0.5?'clash':'hit');
+    Sfx.play('melee', { age:u.age, pan: panOf(u.x) });
   } else {
     fireProjectile(u, def, tgt);
   }
@@ -2255,17 +2607,17 @@ function fireProjectile(u, def, tgt){
     else if(tgt.turret) hurtTurret(tgt.side, tgt.slot, dmg, u.side);
     else { hurtUnit(tgt, dmg, u.side); if(def.splash) areaDamage(tgt.x, u.side, dmg*0.4, def.splash, true); }
     flashAt(sx, sy, common.color, 16);
-    if(Math.random()<0.4) Sfx.play('laser');
+    Sfx.play('shoot', { proj:'laser', age:u.age, pan: panOf(sx) });
     return;
   }
   if(def.proj==='bullet'){
     G.shots.push({ kind:'bullet', x:sx, y:sy, vx:dx/dist*1700, vy:dy/dist*1700, grav:0, life:1.4, ...common });
-    muzzleFx(sx,sy,dir,common.color); Sfx.play('gun');
+    muzzleFx(sx,sy,dir,common.color); Sfx.play('shoot', { proj:'bullet', age:u.age, pan: panOf(sx) });
     return;
   }
   if(def.proj==='plasma'){
     G.shots.push({ kind:'plasma', x:sx, y:sy, vx:dx/dist*820, vy:dy/dist*820, grav:0, life:2.2, trail:0, ...common });
-    muzzleFx(sx,sy,dir,common.color); Sfx.play('laser');
+    muzzleFx(sx,sy,dir,common.color); Sfx.play('shoot', { proj:'plasma', age:u.age, pan: panOf(sx) });
     return;
   }
   const speed = def.proj==='shell' ? 700 : (def.proj==='rocket' ? 620 : (def.proj==='boulder' ? 520 : 720));
@@ -2273,7 +2625,7 @@ function fireProjectile(u, def, tgt){
   const aim = leadAim(sx, sy, tx, ty, speed, unitVelX(tgt), grav);
   G.shots.push({ kind:def.proj, x:sx, y:sy, vx:aim.vx, vy:aim.vy, grav, life:aim.tt+1.8, trail:0, ...common });
   muzzleFx(sx,sy,dir,common.color);
-  Sfx.play(def.proj==='shell'||def.proj==='boulder' ? 'cannon' : (def.proj==='rocket'?'cannon':'arrow'));
+  Sfx.play('shoot', { proj:def.proj, age:u.age, pan: panOf(sx) });
 }
 function muzzleFx(x,y,dir,c){
   flashAt(x+dir*8, y, c, 12);
@@ -2326,7 +2678,7 @@ function onImpact(s, hit){
     explode(s.x, s.y, s.splash>80?1.25:1, s.color);
     if(unit) hurtUnit(unit, s.dmg, s.side);
     areaDamage(s.x, s.side, s.dmg*(0.75), s.splash, true);
-    Sfx.play('boom');
+    Sfx.play('boom', { size: s.splash>80?1.35:1, pan: panOf(s.x) });
   } else {
     if(unit){ hurtUnit(unit, s.dmg, s.side); spark(s.x, s.y, 6, '#ffe9a8', 190); }
     else if(hit.turret){ hurtTurret(hit.side, hit.slot, s.dmg, s.side); spark(s.x, s.y, 6, '#cfe0ff', 190); }
@@ -2334,7 +2686,8 @@ function onImpact(s, hit){
     else { puff(s.x, GROUND, 3, '#cfc6b4'); }
   }
 }
-function areaDamage(x, side, dmg, radius, friendly){
+/* 范围伤害。hitBase=false 时只打部队（特殊武器专用：技能不伤基地） */
+function areaDamage(x, side, dmg, radius, hitBase){
   const foe = side==='p'?'e':'p';
   for(const o of G.units){
     if(o.dead || o.side!==foe) continue;
@@ -2345,8 +2698,10 @@ function areaDamage(x, side, dmg, radius, friendly){
     const t = G.turrets[foe][i];
     if(t && t.hp>0 && Math.abs(slotX(foe,i)-x) <= radius) hurtTurret(foe, i, dmg, side);
   }
-  const edge = baseX(foe) + (foe==='p'?BASE_HALF:-BASE_HALF);
-  if(Math.abs(edge - x) <= radius) hurtBase(foe, dmg*0.5, side);
+  if(hitBase !== false){
+    const edge = baseX(foe) + (foe==='p'?BASE_HALF:-BASE_HALF);
+    if(Math.abs(edge - x) <= radius) hurtBase(foe, dmg*0.5, side);
+  }
 }
 function hurtUnit(o, dmg, fromSide){
   if(o.dead || dmg<=0) return;
@@ -2363,7 +2718,7 @@ function hurtUnit(o, dmg, fromSide){
     addXP(fromSide, XP_PER_KILL);
     ftext(o.x, GROUND+o.yOff-72, '+'+def.goldKill, '#ffd46a', 20);
     puff(o.x, GROUND+o.yOff-30, 6, '#c9bfa8');
-    if(Math.random()<0.7) Sfx.play('hit');
+    Sfx.play('die', { pan: panOf(o.x) });
   }
 }
 function hurtTurret(side, slot, dmg, fromSide){
@@ -2375,6 +2730,7 @@ function hurtTurret(side, slot, dmg, fromSide){
     const sp = slotPos(side, slot);
     ring(sp.x, sp.y-26, '#8fd0ff', 24);
     spark(sp.x, sp.y-40, 3, '#cfe0ff', 150);
+    Sfx.play('shield', { pan: panOf(sp.x) });
   }
 }
 function hurtBase(side, dmg, fromSide){
@@ -2386,8 +2742,15 @@ function hurtBase(side, dmg, fromSide){
   const bx = baseX(side);
   spark(bx + rand(-60,60), GROUND-rand(30,150), 4, '#ffd46a', 170);
   shake(dmg>80?7:3.4);
-  if(Math.random()<0.5) Sfx.play('hitbase');
+  Sfx.play('hitbase', { pan: panOf(bx) });
   if(S_.baseHp<=0){ S_.baseHp = 0; baseDestroyed(side); }
+}
+/* 战火消耗：只扣血，不刷特效/经验/音效（用于长时间胶着时的收束保护） */
+function fatigueDamage(side, dmg){
+  const S_ = stOf(side);
+  if(S_.baseHp <= 0) return;
+  S_.baseHp -= dmg;
+  if(S_.baseHp <= 0){ S_.baseHp = 0; baseDestroyed(side); }
 }
 function baseDestroyed(side){
   const bx = baseX(side);
@@ -2410,7 +2773,7 @@ function tryBuildTurret(side, slot, silent){
   const bsp = slotPos(side,slot);
   puff(bsp.x, bsp.y+4, 8, '#d8cdb6');
   ring(bsp.x, bsp.y-20, '#8fd0ff', 30);
-  if(side==='p'){ Sfx.play('tower'); toast(AGES[S_.age].name+'炮塔已部署','blue'); }
+  if(side==='p'){ Sfx.play('build', { age:S_.age, pan: panOf(bsp.x) }); toast(AGES[S_.age].name+'炮塔已部署','blue'); }
   return true;
 }
 /* 出售炮塔：按比例回收金币（回收比例见 SELL_RATE） */
@@ -2425,8 +2788,8 @@ function sellTurret(side, slot, silent){
   puff(sp.x, sp.y+6, 7, '#d8cdb6');
   ring(sp.x, sp.y-18, '#ffd08a', 28);
   ftext(sp.x, sp.y-46, '+'+back, '#ffd46a', 22);
-  if(side==='p'){ Sfx.play('coin'); if(!silent) toast('已出售「'+def.name+'」，回收 🪙'+back,'gold'); }
-  else Sfx.play('tower');
+  if(side==='p'){ Sfx.play('sell', { pan: panOf(sp.x) }); if(!silent) toast('已出售「'+def.name+'」，回收 🪙'+back,'gold'); }
+  else Sfx.play('sell', { pan: panOf(sp.x) });
   return true;
 }
 function sellBack(slot){
@@ -2477,8 +2840,8 @@ function updateTurrets(dt){
         if(def.proj==='laser'){
           G.beams.push({ x1:sx, y1:sy, x2:best.x, y2:ty, life:0.22, max:0.22, color:'#c084fc', w:5 });
           hurtUnit(best, dmg, side);
-          if(def.splash) areaDamage(best.x, side, dmg*0.35, def.splash, true);
-          Sfx.play('laser');
+          if(def.splash) areaDamage(best.x, side, dmg*0.35, def.splash, false);
+          Sfx.play('shoot', { proj:'laser', age:t.age, pan: panOf(cx) });
         } else {
           const speed = def.proj==='bullet'?1750:(def.proj==='bolt'?1200:(def.proj==='boulder'?560:760));
           const grav = (def.proj==='bullet'||def.proj==='bolt')?0:900;
@@ -2486,7 +2849,7 @@ function updateTurrets(dt){
           G.shots.push({ kind: def.proj, x:sx, y:sy, vx:aim.vx, vy:aim.vy, grav, life:aim.tt+1.6,
             side, dmg, splash:def.splash||0, color:'#ffd46a', trail:0 });
           muzzleFx(sx,sy, side==='p'?1:-1, '#ffd46a');
-          Sfx.play(def.proj==='bullet'?'gun':(def.proj==='bolt'?'arrow':'cannon'));
+          Sfx.play('shoot', { proj:def.proj, age:t.age, pan: panOf(cx) });
         }
       }
     }
@@ -2540,7 +2903,7 @@ function trySpecial(side, x){
       G.specials.push({ type:'orbital', side, t:0, tx:x, dmg, pulses:[], done:false });
       break;
   }
-  Sfx.play('special');
+  Sfx.play('special', { age, pan: panOf(x) });
   if(side==='p'){ toast('特殊武器：'+sp.name+' 已释放','gold'); shake(5); }
   return true;
 }
@@ -2577,7 +2940,7 @@ function updateSpecials(dt){
             G.fx.push({ type:'arrow', x:ax, y:ay, vx:rand(-40,40), vy:rand(760,920), life:0.95, max:0.95, s:14, c:'#e9d5ff', grav:120, rot:-0.2 });
           }
           runLater(0.32, ()=>{ if(G.over) return; areaDamage(cx, sp.side, sp.dmg, 110, false);
-            for(let k=0;k<12;k++) spark(cx+rand(-90,90), GROUND-rand(10,60), 3, '#e9d5ff', 190); Sfx.play('arrow'); });
+            for(let k=0;k<12;k++) spark(cx+rand(-90,90), GROUND-rand(10,60), 3, '#e9d5ff', 190); Sfx.play('shoot', { proj:'arrow', pan: panOf(cx) }); });
         }
         if(sp.t > 2.8) sp.done = true;
         break; }
@@ -2596,7 +2959,7 @@ function updateSpecials(dt){
         if(sp.t >= sp.delay){
           explode(sp.x, GROUND-14, 1.25, '#ffb43d');
           areaDamage(sp.x, sp.side, sp.dmg, 92, false);
-          Sfx.play('boom');
+          Sfx.play('boom', { size:1.2, pan: panOf(sp.x) });
           sp.done = true;
         }
         break; }
@@ -2627,7 +2990,7 @@ function updateSpecials(dt){
           shake(9);
           runLater(0.12, ()=>{ if(G.over) return; areaDamage(px, sp.side, sp.dmg, 120, false);
             for(let k=0;k<16;k++) spark(px+rand(-90,90), GROUND-rand(10,120), 3, '#7ef9ff', 260); });
-          Sfx.play('cannon');
+          Sfx.play('boom', { size:1.8, pan: panOf(px) });
         }
         for(const b of sp.pulses) b.t += dt;
         if(sp.t > 3.2){ sp.done = true; }
@@ -2657,6 +3020,7 @@ function aiWave(){
     if(unitCount('e') >= cap) break;
     if(trySpawn('e', k, true)) n++; else break;
   }
+  if(n >= 2) Sfx.play('horn', { pan: panOf(slotX('e',0)) });   // 敌方成波进攻的预警号角
   return n;
 }
 function updateAI(dt){
@@ -2722,11 +3086,21 @@ function update(dt){
   G.time += dt; G.elapsed += dt;
   const D = G.difficulty;
   // 长时间僵持时资源产出提升，避免双方无限对耗
-  const rush = 1 + Math.min(1.8, Math.max(0, (G.elapsed-360)/60)*0.30);
-  if(!G.rushOn && G.elapsed>360){
+  const rush = 1 + Math.min(2.6, Math.max(0, (G.elapsed-240)/60)*0.45);
+  if(!G.rushOn && G.elapsed>240){
     G.rushOn = true;
-    toast('战事白热化：双方资源产出提升！','gold');
-    Sfx.play('evolve');
+    toast('战事白热化：双方资源产出大幅提升！','gold');
+    Sfx.play('alarm');
+  }
+  /* 胶着保护：10 分钟后双方基地被战火持续消耗，保证对局必然收束 */
+  if(G.elapsed > 600){
+    if(!G.fatigue){
+      G.fatigue = true;
+      toast('战局胶着：双方基地开始被战火消耗！','red');
+      Sfx.play('horn', { pan:0 });
+    }
+    fatigueDamage('p', G.p.maxHp * 0.005 * dt);
+    fatigueDamage('e', G.e.maxHp * 0.005 * dt);
   }
   G.p.gold += BASE_INCOME[G.p.age]*rush*dt;
   G.p.xp   += BASE_XPRATE[G.p.age]*dt;
@@ -2747,7 +3121,12 @@ function update(dt){
   G.shake = Math.max(0, G.shake - dt*24);
   G.flash = Math.max(0, G.flash - dt*3.2);
   G.hudAcc += dt;
-  if(G.hudAcc > 0.07){ G.hudAcc = 0; syncHUD(); }
+  if(G.hudAcc > 0.07){
+    G.hudAcc = 0; syncHUD();
+    // 音乐强度随战况起伏：基地越危险、敌军越多，鼓点越密
+    const hp = G.p.baseHp / G.p.maxHp;
+    Sfx.setIntensity(clamp((1-hp)*1.5 + unitCount('e')/9*0.55, 0, 1));
+  }
   if(!G.over){
     if(G.e.baseHp<=0) endGame(true);
     else if(G.p.baseHp<=0) endGame(false);
@@ -2757,6 +3136,7 @@ function endGame(win){
   if(G.over) return;
   G.over = true; G.running = false; G.win = win;
   G.aiming = false;
+  Sfx.musicStop();
   ACCOUNT.record(win, G.p.age, G.elapsed);
   Sfx.play(win?'win':'lose');
   setTimeout(()=>showEnd(win), 1500);
@@ -2768,19 +3148,21 @@ function newGame(diffKey){
   G.difficulty = DIFFS[G.diff] || DIFFS.normal;
   G.running = true; G.paused = false; G.over = false; G.win = false;
   G.elapsed = 0; G.time = 0; G.shake = 0; G.flash = 0; G.hudAcc = 0;
-  G.rushOn = false;
+  G.rushOn = false; G.fatigue = false;
   G.units = []; G.shots = []; G.fx = []; G.texts = []; G.beams = []; G.specials = [];
   timers.length = 0;
   G.turrets = { p:[null,null,null,null], e:[null,null,null,null] };
   G.specialCd = { p:0, e:0 };
   G.aiming = false;
   G.uid = 1;
-  G.p = { side:'p', age:0, gold:175, xp:0, baseHp:BASE_HP, maxHp:BASE_HP, kills:0, dmg:0 };
-  G.e = { side:'e', age:0, gold:170*G.difficulty.income, xp:0, baseHp:BASE_HP, maxHp:BASE_HP, kills:0, dmg:0 };
+  G.p = { side:'p', age:0, gold:175, xp:0, baseHp:baseHpFor(0), maxHp:baseHpFor(0), kills:0, dmg:0 };
+  G.e = { side:'e', age:0, gold:170*G.difficulty.income, xp:0, baseHp:baseHpFor(0), maxHp:baseHpFor(0), kills:0, dmg:0 };
   G.ai = { think:1.4, spawnCd:2.6, specialCd:6, waveCd: 26, panic:0 };
   updateSpeedUI();
   buildCards();
   syncHUD(true);
+  Sfx.setAge(0);
+  Sfx.musicStart(0);
 }
 /* =====================================================================
    界面层：登录 / 菜单 / HUD / 输入 / 主循环
@@ -2812,6 +3194,7 @@ function showScreen(name){
   $('#hud').classList.add('hidden');
   if(name==='game'){ $('#hud').classList.remove('hidden'); G.screen='game'; }
   else { $('#'+name).classList.remove('hidden'); G.screen = name.replace('scr-',''); }
+  updateRotateOverlay();
 }
 function toast(msg, kind){
   const d = document.createElement('div');
@@ -2955,7 +3338,7 @@ let dockSig = '', cardsAge = -1;
 /* ---------------- 兵种 / 炮塔预览 ---------------- */
 const PV = { kind:null, age:0, idx:0, t:0 };
 function showPreview(kind, age, idx){
-  if(G.screen !== 'game') return;
+  if(G.screen !== 'game' || TOUCH) return;      // 触屏没有悬停，预览面板不弹出
   PV.kind = kind; PV.age = age; PV.idx = idx;
   const info = $('#previewInfo');
   info.innerHTML = '';
@@ -3037,7 +3420,7 @@ function buildCards(){
     const nm = document.createElement('div'); nm.className='nm'; nm.textContent = def.name;
     const row = document.createElement('div'); row.className='row';
     const cost = document.createElement('span'); cost.className='c'; cost.textContent = '🪙'+def.cost;
-    const hpv = document.createElement('span'); hpv.style.color='#9fb4d4'; hpv.textContent = '❤'+def.hp;
+    const hpv = document.createElement('span'); hpv.className='hpv'; hpv.style.color='#9fb4d4'; hpv.textContent = '❤'+def.hp;
     row.appendChild(cost); row.appendChild(hpv);
     const desc = document.createElement('div'); desc.className='desc';
     desc.textContent = def.desc + ' · 攻击 ' + def.atk + ' · 射程 ' + (def.range>200?'远程':'近战');
@@ -3069,6 +3452,9 @@ function buildDock(){
       extra.textContent = '射程 +' + bonus.range + ' · 伤害 +' + Math.round((bonus.dmg-1)*100) + '%';
       col.appendChild(nm); col.appendChild(cost); col.appendChild(extra);
       slot.title = def.name + '：' + def.desc;
+      const mob = document.createElement('div'); mob.className='mob';
+      mob.textContent = '＋' + towerCost(age, i);
+      slot.appendChild(mob);
     } else {
       const cvs = document.createElement('canvas');
       cvs.width = 84; cvs.height = 84; cvs.style.width='calc(38px*var(--k))'; cvs.style.height='calc(38px*var(--k))';
@@ -3080,6 +3466,9 @@ function buildDock(){
       const hint = document.createElement('div'); hint.className='sellhint';
       hint.textContent = '出售 +🪙' + sellBack(i);
       slot.appendChild(hint);
+      const mob = document.createElement('div'); mob.className='mob';
+      mob.textContent = (i+1) + '层·无敌';
+      slot.appendChild(mob);
     }
     slot.appendChild(col);
     slot.onclick = ()=>{ if(G.screen!=='game') return; t ? sellTurret('p', i) : tryBuildTurret('p', i); };
@@ -3099,7 +3488,7 @@ function syncHUD(force){
   $('#pEmblem').textContent = AGES[p.age].icon;
   $('#eEmblem').textContent = AGES[e.age].icon;
   $('#hudGold').textContent = fmtN(p.gold);
-  $('#hudRate').textContent = '+' + (BASE_INCOME[p.age] * (1 + Math.min(1.8, Math.max(0,(G.elapsed-360)/60)*0.30))).toFixed(1) + '/s';
+  $('#hudRate').textContent = '+' + (BASE_INCOME[p.age] * (1 + Math.min(2.2, Math.max(0,(G.elapsed-300)/60)*0.35))).toFixed(1) + '/s';
   $('#hudTime').textContent = fmtT(G.elapsed);
   if(p.age>=4){ $('#hudXpFill').style.width='100%'; $('#hudXpText').textContent='MAX'; }
   else {
@@ -3198,6 +3587,7 @@ function showEnd(win){
 }
 function quitToMenu(){
   G.running = false; G.paused = false; G.over = false;
+  Sfx.musicStop();
   $('#scr-pause').classList.add('hidden');
   renderAccountChips();
   showScreen('scr-menu');
@@ -3218,7 +3608,14 @@ function toggleSound(){
   const m = Sfx.toggle();
   $('#soundBtn').textContent = m ? '🔇' : '🔊';
   $('#soundBtn2').textContent = '音效：' + (m?'关':'开');
+  const ps = $('#pauseSound'); if(ps) ps.textContent = '音效：' + (m?'关':'开');
   if(!m) Sfx.play('click');
+}
+function toggleMusic(){
+  const on = Sfx.toggleMusic();
+  const pm = $('#pauseMusic'); if(pm) pm.textContent = '音乐：' + (on?'开':'关');
+  const b = $('#musicBtn'); if(b) b.style.opacity = on ? '1' : '0.42';
+  if(on){ Sfx.init(); Sfx.play('click2'); }
 }
 function switchAccount(){
   const a = ACCOUNT.data;
@@ -3277,6 +3674,9 @@ function initInput(){
   });
   $('#pauseBtn').onclick = ()=>togglePause();
   $('#soundBtn').onclick = toggleSound;
+  $('#musicBtn').onclick = toggleMusic;
+  $('#pauseSound').onclick = toggleSound;
+  $('#pauseMusic').onclick = toggleMusic;
   $('#helpBtn').onclick = ()=>openHelp('game');
   $('#quitBtn').onclick = ()=>{ togglePause(true); };
   document.querySelectorAll('.speedgrp .cbtn').forEach(b=>{
@@ -3300,9 +3700,11 @@ function initInput(){
   $('#againBtn').onclick = ()=>{ startGame(G.diff); };
   $('#endMenuBtn').onclick = quitToMenu;
   $('#helpCloseBtn').onclick = closeHelp;
+  $('#rotBtn').onclick = ()=>{ Sfx.init(); Sfx.play('click'); enterLandscape(); };
+  $('#pauseFs').onclick = ()=>{ Sfx.play('click'); enterLandscape(); };
   $('#qqLoginBtn').onclick = loginAction;
   $('#guestBtn').onclick = guestLogin;
-  $('#startBtn').onclick = ()=>{ Sfx.init(); startGame(G.diff); };
+  $('#startBtn').onclick = ()=>{ Sfx.init(); if(TOUCH) enterLandscape(); startGame(G.diff); };
   $('#helpBtn2').onclick = ()=>openHelp('menu');
   $('#soundBtn2').onclick = toggleSound;
   $('#switchAcctBtn').onclick = switchAccount;
@@ -3343,6 +3745,7 @@ function initInput(){
       if(k==='p'){ togglePause(); return; }
       if(k==='t'){ G.speed = G.speed>=3?1:G.speed+1; updateSpeedUI(); toast('倍速 '+G.speed+'x','blue'); return; }
       if(k==='m'){ toggleSound(); return; }
+      if(k==='n'){ toggleMusic(); return; }
       if(k==='g'){ $('#evolveBtn').click(); return; }
     }
   });
@@ -3388,6 +3791,12 @@ function boot(){
   requestAnimationFrame(loop);
 }
 window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', ()=>setTimeout(layout, 220));
+document.addEventListener('fullscreenchange', ()=>setTimeout(layout, 150));
+/* 游戏中禁止页面滚动/下拉刷新，避免误触；登录与菜单页仍可正常滚动 */
+document.addEventListener('touchmove', e=>{
+  if(G.screen === 'game' && !(e.target && e.target.closest && e.target.closest('.screen'))) e.preventDefault();
+}, { passive:false });
 boot();
 </script>
 </body>

@@ -754,14 +754,16 @@ const AGES = [
       gTop:'#8c9184', gMid:'#6d7269', gBot:'#4d5450', accent:'#8fd0ff', line:'#3a403d'
   }},
   { name:'未来纪元', icon:'⚡', theme:{
-      skyTop:'#1b1440', skyMid:'#3b2166', skyBot:'#5b2f6e', sun:'#c9a6ff', sunX:420, sunY:170,
-      far:'#2c2557', mid:'#221d45', near:'#191533',
-      gTop:'#3a3560', gMid:'#2a2748', gBot:'#191730', accent:'#22d3ee', line:'#7c5cff'
+      /* 霓虹未来都市：品红晚霞 + 紫粉天幕 */
+      skyTop:'#2b0f45', skyMid:'#6b1f6e', skyBot:'#b8447e', sun:'#ffb3e6', sunX:1180, sunY:560,
+      far:'#4a1f63', mid:'#321546', near:'#210e30',
+      gTop:'#4a2a63', gMid:'#331c46', gBot:'#1d1029', accent:'#ff6ad5', line:'#8b5cf6'
   }},
   { name:'星际纪元', icon:'🚀', theme:{
-      skyTop:'#070a1e', skyMid:'#101638', skyBot:'#1b2350', sun:'#9fd8ff', sunX:1480, sunY:150,
-      far:'#1c2249', mid:'#141936', near:'#0d1126',
-      gTop:'#2b3157', gMid:'#1f2444', gBot:'#12152b', accent:'#7dd3fc', line:'#8b5cf6'
+      /* 深空战场：纯黑太空 + 金属甲板 */
+      skyTop:'#01020a', skyMid:'#04061a', skyBot:'#080f2c', sun:'#e8f4ff', sunX:1420, sunY:210,
+      far:'#0e1533', mid:'#0a0f24', near:'#050814',
+      gTop:'#39435c', gMid:'#28303f', gBot:'#171c26', accent:'#7dd3fc', line:'#22d3ee'
   }},
 ];
 const LAST_AGE = AGES.length - 1;
@@ -819,19 +821,19 @@ const UNITS = [
   ],
   [ // 6 未来纪元
     { name:'等离子步兵', cost:165, hp:860, atk:132, rate:0.72, range:540, speed:70, scale:0.98, rig:'humanoid', weapon:'plasma', proj:'plasma',
-      goldKill:20, pal:{ skin:'#dfb8ff', cloth:'#2b2350', armor:'#3d3070', accent:'#5eead4' }, desc:'等离子速射，穿透性强' },
+      goldKill:20, pal:{ skin:'#ffd8f4', cloth:'#3a1550', armor:'#5b2680', accent:'#e879f9' }, desc:'等离子速射，穿透性强' },
     { name:'光棱卫队', cost:195, hp:760, atk:168, rate:1.05, range:660, speed:60, scale:0.98, rig:'humanoid', weapon:'prism', proj:'laser', splash:60,
-      goldKill:24, pal:{ skin:'#dfb8ff', cloth:'#3b2a63', armor:'#584a9c', accent:'#c084fc' }, desc:'光束贯穿多个敌人' },
+      goldKill:24, pal:{ skin:'#ffd8f4', cloth:'#4a1f6b', armor:'#7b3fa8', accent:'#f0abfc' }, desc:'光束贯穿多个敌人' },
     { name:'泰坦机甲', cost:380, hp:2300, atk:250, rate:1.4, range:300, speed:42, scale:1.12, rig:'mech', weapon:'none', proj:'plasma', splash:96,
-      goldKill:50, pal:{ skin:'#9db4d8', cloth:'#2b3350', armor:'#404a70', accent:'#22d3ee' }, desc:'战场霸主，可摧毁一切' },
+      goldKill:50, pal:{ skin:'#f2d8ff', cloth:'#3d1a52', armor:'#6b2f96', accent:'#ff8ae0' }, desc:'战场霸主，可摧毁一切' },
   ],
   [ // 7 星际纪元
     { name:'星舰陆战队', cost:250, hp:1350, atk:205, rate:0.72, range:260, speed:66, scale:0.98, rig:'humanoid', weapon:'plasma', proj:'plasma',
-      goldKill:32, pal:{ skin:'#cfe4ff', cloth:'#1d2a48', armor:'#2f4272', accent:'#38bdf8' }, desc:'轨道空降兵，速射压制' },
+      goldKill:32, pal:{ skin:'#eaf4ff', cloth:'#2a3444', armor:'#6b7f9e', accent:'#a5f3fc' }, desc:'轨道空降兵，速射压制' },
     { name:'相位炮手', cost:290, hp:1150, atk:260, rate:1.00, range:720, speed:58, scale:0.98, rig:'humanoid', weapon:'prism', proj:'laser', splash:70,
-      goldKill:38, pal:{ skin:'#cfe4ff', cloth:'#2a2050', armor:'#4c3f8f', accent:'#a78bfa' }, desc:'相位光束贯穿多个目标' },
+      goldKill:38, pal:{ skin:'#eaf4ff', cloth:'#26303f', armor:'#7d90ab', accent:'#67e8f9' }, desc:'相位光束贯穿多个目标' },
     { name:'星际战舰', cost:520, hp:3400, atk:380, rate:1.30, range:420, speed:48, scale:1.1, rig:'ship', weapon:'none', proj:'plasma', splash:120,
-      goldKill:82, pal:{ skin:'#bcd2f0', cloth:'#1b2544', armor:'#334770', accent:'#7dd3fc' }, desc:'反重力战舰，毁灭一切' },
+      goldKill:82, pal:{ skin:'#dbeafe', cloth:'#2a3444', armor:'#7d90ab', accent:'#7dd3fc' }, desc:'反重力战舰，毁灭一切' },
   ],
 ];
 
@@ -1387,12 +1389,15 @@ const BGC = {};
 function bgData(age){
   if(BGC[age]) return BGC[age];
   const R = mulberry32(9377+age*131);
-  const far=[], mid=[];
+  const far=[], mid=[], nearR=[];
   for(let x=-100;x<=W+100;x+=70){
     far.push({ x, h: 90+R()*140+R()*R()*160 });
   }
   for(let x=-60;x<=W+60;x+=44){
     mid.push({ x, h: 40+R()*90 });
+  }
+  for(let x=-40;x<=W+40;x+=30){
+    nearR.push({ x, h: 16+R()*52 });
   }
   const stars=[];
   for(let i=0;i<150;i++) stars.push({ x:R()*W, y:R()*440, r:0.6+R()*1.8, ph:R()*7, sp:0.5+R()*1.6 });
@@ -1418,7 +1423,7 @@ function bgData(age){
   for(let i=0;i<170;i++) specs.push({ x:R()*W, y:GROUND-6+R()*(H-GROUND+6), w:6+R()*40, a:0.04+R()*0.1, r:R() });
   const grass=[];
   for(let i=0;i<90;i++) grass.push({ x:R()*W, h:5+R()*13, p:-0.4+R()*0.8, a:0.25+R()*0.4 });
-  BGC[age] = { far, mid, stars, clouds, items, specs, grass };
+  BGC[age] = { far, mid, near:nearR, stars, clouds, items, specs, grass };
   return BGC[age];
 }
 
@@ -1444,17 +1449,65 @@ function paintStaticBG(age){
   g.addColorStop(0, th.skyTop); g.addColorStop(0.52, th.skyMid); g.addColorStop(1, th.skyBot);
   ctx.fillStyle = g; ctx.fillRect(0,0,W,GROUND+70);
 
+  /* 大气层次：高空更浓，近地平线泛光 */
+  const haze = ctx.createLinearGradient(0, GROUND-380, 0, GROUND+12);
+  haze.addColorStop(0, rgba(th.skyBot, 0));
+  haze.addColorStop(0.55, rgba(th.skyBot, 0.34));
+  haze.addColorStop(1, rgba(th.skyBot, 0.86));
+  ctx.fillStyle = haze; ctx.fillRect(0, GROUND-380, W, 392);
+  ctx.fillStyle = rgba(th.sun, age>=6 ? 0.06 : 0.12); ctx.fillRect(0, GROUND-140, W, 150);
+
   // 天体
   const sx = th.sunX, sy = th.sunY;
   const sg = ctx.createRadialGradient(sx,sy,4,sx,sy,190);
   sg.addColorStop(0, rgba(th.sun,0.95)); sg.addColorStop(0.22, rgba(th.sun,0.42));
   sg.addColorStop(0.55, rgba(th.sun,0.13)); sg.addColorStop(1, rgba(th.sun,0));
   ctx.fillStyle = sg; circle(sx,sy,190); ctx.fill();
-  ctx.fillStyle = rgba(th.sun,0.95); circle(sx,sy, age===4?44:54); ctx.fill();
-  if(age===4){ ctx.fillStyle = rgba(th.skyMid,0.9); circle(sx+20,sy-12, 44); ctx.fill(); }
+  ctx.fillStyle = rgba(th.sun,0.95); circle(sx,sy, age===6?120:age===7?46:54); ctx.fill();
+  if(age===6){                                   // 未来纪元：巨大的落日压在城市天际线后
+    ctx.save(); ctx.globalAlpha = 0.35;
+    ctx.fillStyle = rgba('#ffd0f0',0.9); circle(sx,sy,190); ctx.fill(); ctx.restore();
+  }
+  if(age===7){                                   // 星际纪元：深空中的巨行星
+    const px = 1420, py = 210, pr = 118;
+    const pg = ctx.createRadialGradient(px-pr*0.35,py-pr*0.4,pr*0.15,px,py,pr);
+    pg.addColorStop(0,'#8fb6d8'); pg.addColorStop(0.55,'#4a6c92'); pg.addColorStop(1,'#16233d');
+    ctx.fillStyle = pg; circle(px,py,pr); ctx.fill();
+    ctx.save(); ctx.globalAlpha = 0.85;         // 行星环
+    ctx.translate(px,py); ctx.rotate(-0.42);
+    ctx.strokeStyle = 'rgba(180,214,240,.55)'; ctx.lineWidth = 9;
+    ctx.beginPath(); ctx.ellipse(0,0,pr*1.75,pr*0.34,0,0,7); ctx.stroke();
+    ctx.strokeStyle = 'rgba(120,160,200,.35)'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.ellipse(0,0,pr*2.05,pr*0.42,0,0,7); ctx.stroke();
+    ctx.restore();
+  }
+
+  /* 阳光光束（太空时代改为星云带） */
+  if(age < 6){
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for(let i=0;i<7;i++){
+      const a = -1.05 + i*0.13;
+      ctx.globalAlpha = 0.045 + 0.03*Math.abs(Math.sin(i*1.7));
+      ctx.fillStyle = th.sun;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(sx + Math.cos(a)*980 - 46, sy + Math.sin(a)*980);
+      ctx.lineTo(sx + Math.cos(a)*980 + 46, sy + Math.sin(a)*980);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.restore();
+  } else {
+    const ng = ctx.createLinearGradient(0, 80, W, 460);
+    ng.addColorStop(0, 'rgba(76,29,149,0)');
+    ng.addColorStop(0.38, age===7 ? 'rgba(56,189,248,.15)' : 'rgba(232,121,249,.14)');
+    ng.addColorStop(0.68, 'rgba(139,92,246,.11)');
+    ng.addColorStop(1, 'rgba(76,29,149,0)');
+    ctx.fillStyle = ng; ctx.fillRect(0, 60, W, 470);
+  }
+  drawSkyExtras(age, th);
 
   // 远山
-  ctx.fillStyle = rgba(th.far, age===4?0.85:0.72);
+  ctx.fillStyle = rgba(th.far, (age===6||age===7)?0.88:0.72);
   ctx.beginPath(); ctx.moveTo(-120, GROUND+10);
   for(const p of d.far){ ctx.lineTo(p.x, GROUND+10-p.h); }
   ctx.lineTo(W+120, GROUND+10); ctx.closePath(); ctx.fill();
@@ -1465,6 +1518,13 @@ function paintStaticBG(age){
   ctx.beginPath(); ctx.moveTo(-60, GROUND+10);
   for(const p of d.mid) ctx.lineTo(p.x, GROUND+10-p.h*0.62);
   ctx.lineTo(W+60, GROUND+10); ctx.closePath(); ctx.fill();
+
+  // 第三层：更近的暗色丘陵，制造纵深
+  ctx.fillStyle = rgba(th.near, 0.92);
+  ctx.beginPath(); ctx.moveTo(-40, GROUND+10);
+  for(const p of d.near) ctx.lineTo(p.x, GROUND+10-p.h);
+  ctx.lineTo(W+40, GROUND+10); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = rgba(th.line, 0.30); ctx.fillRect(0, GROUND-6, W, 5);
 
   drawScenery(age, th, 0);
 
@@ -1479,6 +1539,28 @@ function paintStaticBG(age){
     rr(s.x, s.y, s.w, 3.2, 2); ctx.fill();
   }
   ctx.globalAlpha = 1;
+  /* 地面细节：色带 + 斑块 + 碎石，让地面不再是一块纯色 */
+  for(let i=0;i<5;i++){
+    ctx.fillStyle = rgba(i%2 ? th.gTop : th.gBot, 0.10);
+    ctx.fillRect(0, GROUND+10+i*30, W, 13);
+  }
+  const RG = mulberry32(99 + age*7);
+  for(let i=0;i<64;i++){
+    const px = RG()*W, py = GROUND+8+RG()*(H-GROUND-14), r = 4+RG()*18;
+    ctx.fillStyle = rgba(RG()>0.5 ? th.gBot : th.gTop, 0.17);
+    ctx.beginPath(); ctx.ellipse(px, py, r, r*0.32, 0, 0, 7); ctx.fill();
+  }
+  for(let i=0;i<110;i++){
+    const px = RG()*W, py = GROUND+5+RG()*(H-GROUND-8), r = 1.3+RG()*3.6;
+    ctx.fillStyle = rgba('#000000', 0.08+RG()*0.14);
+    circle(px, py, r); ctx.fill();
+  }
+  for(let i=0;i<26;i++){
+    const px = RG()*W, py = GROUND+12+RG()*(H-GROUND-24);
+    ctx.save(); ctx.translate(px, py); ctx.rotate(RG()*3);
+    ctx.fillStyle = rgba(shade(th.gTop,0.35), 0.34);
+    rr(-5, -2.4, 10, 4.8, 2); ctx.fill(); ctx.restore();
+  }
   if(age<=2){
     for(const gr of d.grass){
       ctx.strokeStyle = rgba(shade(th.gTop,0.35), gr.a*0.8); ctx.lineWidth = 1.6;
@@ -1486,24 +1568,65 @@ function paintStaticBG(age){
       ctx.quadraticCurveTo(gr.x+gr.p*5, GROUND-4-gr.h*0.5, gr.x+gr.p*9, GROUND-2-gr.h); ctx.stroke();
     }
   }
-  if(age===3){
-    ctx.strokeStyle = 'rgba(240,235,180,.32)'; ctx.lineWidth = 4;
+  /* 地面装饰按时代区分（注意：序号是 8 时代的新顺序） */
+  if(age===4){                                   // 工业：枕木与铁轨
+    ctx.strokeStyle = 'rgba(120,110,96,.45)'; ctx.lineWidth = 5;
+    for(let x=40;x<W;x+=64){ ctx.beginPath(); ctx.moveTo(x,GROUND+40); ctx.lineTo(x,GROUND+72); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(180,180,190,.5)'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0,GROUND+46); ctx.lineTo(W,GROUND+46); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,GROUND+66); ctx.lineTo(W,GROUND+66); ctx.stroke();
+  }
+  if(age===5){                                   // 现代：公路虚线
+    ctx.strokeStyle = 'rgba(240,235,180,.34)'; ctx.lineWidth = 4;
     for(let x=60;x<W;x+=150) ctx.strokeRect(x, GROUND+52, 74, 5);
   }
-  if(age===4){
-    ctx.strokeStyle = 'rgba(34,211,238,.30)'; ctx.lineWidth = 2.5;
-    for(let x=40;x<W;x+=120){ ctx.beginPath(); ctx.moveTo(x,GROUND+26); ctx.lineTo(x+70,GROUND+26); ctx.stroke(); }
-    ctx.strokeStyle = 'rgba(192,132,252,.20)'; ctx.lineWidth = 1.5;
-    for(let x=90;x<W;x+=190){ ctx.beginPath(); ctx.moveTo(x,GROUND+58); ctx.lineTo(x+110,GROUND+58); ctx.stroke(); }
+  if(age===6){                                   // 未来：品红霓虹带
+    ctx.strokeStyle = 'rgba(255,106,213,.36)'; ctx.lineWidth = 3;
+    for(let x=30;x<W;x+=130){ ctx.beginPath(); ctx.moveTo(x,GROUND+24); ctx.lineTo(x+74,GROUND+24); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(34,211,238,.22)'; ctx.lineWidth = 2;
+    for(let x=90;x<W;x+=190){ ctx.beginPath(); ctx.moveTo(x,GROUND+56); ctx.lineTo(x+110,GROUND+56); ctx.stroke(); }
+  }
+  if(age===7){                                   // 星际：金属甲板拼缝
+    ctx.strokeStyle = 'rgba(125,211,252,.30)'; ctx.lineWidth = 2.5;
+    for(let x=0;x<W;x+=160){ ctx.beginPath(); ctx.moveTo(x,GROUND); ctx.lineTo(x,H); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(180,214,240,.18)'; ctx.lineWidth = 2;
+    for(let y=GROUND+30;y<H;y+=44){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(125,211,252,.5)';
+    for(let x=80;x<W;x+=320){ ctx.beginPath(); ctx.arc(x,GROUND+18,4,0,7); ctx.fill(); }
+  }
+  /* 前景压暗：近地面渐隐，让画面中心更聚焦、纵深更强 */
+  const fgGrad = ctx.createLinearGradient(0, H-190, 0, H);
+  fgGrad.addColorStop(0, rgba('#000000', 0));
+  fgGrad.addColorStop(1, rgba('#000000', 0.38));
+  ctx.fillStyle = fgGrad; ctx.fillRect(0, H-190, W, 190);
+  /* 未来纪元：地平线后的霓虹城市天际线 */
+  if(age===6){
+    const R = mulberry32(4242);
+    for(let x=-40;x<W+40;){
+      const bw = 46+R()*86, bh = 90+R()*230;
+      ctx.fillStyle = 'rgba(28,10,40,.92)';
+      ctx.fillRect(x, GROUND-24-bh, bw, bh+24);
+      ctx.fillStyle = 'rgba(255,106,213,.55)';
+      for(let wy=GROUND-16-bh; wy<GROUND-30; wy+=22){
+        for(let wx=x+8; wx<x+bw-10; wx+=18){
+          if(R() > 0.42){ ctx.globalAlpha = 0.35+R()*0.5; ctx.fillRect(wx, wy, 7, 9); }
+        }
+      }
+      ctx.globalAlpha = 1;
+      if(R() > 0.55){ ctx.fillStyle = 'rgba(34,211,238,.55)'; ctx.fillRect(x+bw/2-1.5, GROUND-24-bh-30, 3, 30); }
+      x += bw + 12 + R()*26;
+    }
   }
 }
 function drawBackground(age, t){
   ctx.drawImage(getBaked(age), 0, 0, W, H);
   const th = AGES[age].theme, d = bgData(age);
-  if(age===4){                                  // 星空闪烁
+  if(age>=6){                                   // 星空：未来纪元稀疏、星际纪元密集
+    const dense = age===7;
     for(const s of d.stars){
-      ctx.globalAlpha = 0.3+0.5*Math.abs(Math.sin(t*s.sp+s.ph));
-      ctx.fillStyle = s.r>1.6?'#dbeafe':'#e9d5ff';
+      if(!dense && s.r < 1.1) continue;
+      ctx.globalAlpha = (dense?0.45:0.25) + (dense?0.55:0.35)*Math.abs(Math.sin(t*s.sp+s.ph));
+      ctx.fillStyle = dense ? (s.r>1.6?'#ffffff':'#cfe8ff') : (s.r>1.6?'#ffe8ff':'#e9d5ff');
       circle(s.x, s.y, s.r); ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -1511,16 +1634,106 @@ function drawBackground(age, t){
   for(const c of d.clouds){                     // 云层缓慢飘动
     const x = ((c.x + t*c.sp*9) % (W+520)) - 260;
     const y = c.y;
-    ctx.globalAlpha = c.a * (age===4?0.30:1);
-    ctx.fillStyle = vgrad(x,y-30*c.s,y+26*c.s, age===4?'#6b4f9e':'#ffffff', age===4?'#3b2a66':'#dfe9f7');
+    ctx.globalAlpha = c.a * (age===7?0.14:age===6?0.42:1);
+    ctx.fillStyle = age===7 ? vgrad(x,y-30*c.s,y+26*c.s,'#26325c','#0d1430')
+                  : age===6 ? vgrad(x,y-30*c.s,y+26*c.s,'#8a3a7a','#3d1546')
+                  : vgrad(x,y-30*c.s,y+26*c.s,'#ffffff','#dfe9f7');
     circle(x,y,34*c.s); ctx.fill();
     circle(x+38*c.s,y+8*c.s,25*c.s); ctx.fill();
     circle(x-40*c.s,y+10*c.s,22*c.s); ctx.fill();
     circle(x+8*c.s,y-14*c.s,24*c.s); ctx.fill();
   }
   ctx.globalAlpha = 1;
+  // 环境浮尘 / 余烬 / 光点：让静态背景“活”起来
+  const motes = 30;
+  for(let i=0;i<motes;i++){
+    const p = ((t*0.055 + i*0.137) % 1);
+    const mx = ((i*181 + t*11) % (W + 120)) - 60;
+    const my = GROUND - 30 - p*430 - (i % 5)*26;
+    ctx.globalAlpha = (age>=6 ? 0.30 : 0.20) * (1-p);
+    ctx.fillStyle = age>=6 ? (age===7 ? '#7dd3fc' : '#ff6ad5')
+                  : age===3 ? '#ffb47a'
+                  : age===4 ? '#d8d2c4'
+                  : '#ffeec2';
+    circle(mx, my, 1.5 + (i%3)*0.85); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
 }
 
+/* 各时代的天空元素：飞鸟 / 烟柱 / 飞艇 / 直升机 / 飞行车 / 空间站 */
+function drawSkyExtras(age, th){
+  const R = mulberry32(313 + age*17);
+  if(age <= 2){
+    ctx.strokeStyle = rgba('#2c2418', 0.42); ctx.lineWidth = 2.4;
+    for(let i=0;i<8;i++){
+      const bx = 180 + R()*1560, by = 110 + R()*240, s = 6 + R()*5;
+      ctx.beginPath();
+      ctx.moveTo(bx-s, by);
+      ctx.quadraticCurveTo(bx-s*0.4, by-s*0.8, bx, by-s*0.15);
+      ctx.quadraticCurveTo(bx+s*0.4, by-s*0.8, bx+s, by);
+      ctx.stroke();
+    }
+  } else if(age === 3){
+    for(let i=0;i<5;i++){
+      const bx = 260 + R()*1440;
+      ctx.fillStyle = 'rgba(96,74,62,.20)';
+      ctx.beginPath(); ctx.ellipse(bx, GROUND-160-R()*70, 42+R()*40, 84+R()*60, 0, 0, 7); ctx.fill();
+    }
+  } else if(age === 4){
+    for(let i=0;i<6;i++){
+      const bx = 240 + R()*1480;
+      ctx.fillStyle = 'rgba(120,120,124,.17)';
+      ctx.beginPath(); ctx.ellipse(bx, GROUND-180-R()*90, 46+R()*32, 92+R()*70, 0, 0, 7); ctx.fill();
+    }
+    // 飞艇
+    const ax = 430, ay = 186;
+    ctx.save(); ctx.globalAlpha = 0.78;
+    ctx.fillStyle = '#767a82';
+    ctx.beginPath(); ctx.ellipse(ax, ay, 98, 35, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#9ba0a8';
+    ctx.beginPath(); ctx.ellipse(ax, ay-9, 84, 21, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5f636a'; rr(ax-42, ay+28, 86, 21, 9); ctx.fill();
+    ctx.fillStyle = '#3d4046'; rr(ax-56, ay+35, 17, 8, 3); ctx.fill(); rr(ax+40, ay+35, 17, 8, 3); ctx.fill();
+    ctx.strokeStyle = 'rgba(60,64,70,.6)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(ax-34,ay+24); ctx.lineTo(ax-48,ay+30); ctx.moveTo(ax+34,ay+24); ctx.lineTo(ax+48,ay+30); ctx.stroke();
+    ctx.restore();
+  } else if(age === 5){
+    for(let i=0;i<3;i++){
+      const hx = 300 + R()*1300, hy = 116 + R()*150;
+      ctx.save(); ctx.globalAlpha = 0.45;
+      ctx.fillStyle = '#3f4a55';
+      ctx.beginPath(); ctx.ellipse(hx, hy, 23, 8, 0, 0, 7); ctx.fill();
+      ctx.fillRect(hx-4, hy-10, 32, 4);
+      ctx.fillStyle = 'rgba(205,225,245,.42)'; ctx.fillRect(hx-18, hy-13, 96, 3);
+      ctx.restore();
+    }
+  } else if(age === 6){
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for(let i=0;i<7;i++){
+      const y = 110 + R()*310, x0 = R()*W;
+      const lg = ctx.createLinearGradient(x0-190, y, x0+190, y);
+      lg.addColorStop(0,'rgba(255,106,213,0)');
+      lg.addColorStop(0.5, i%2 ? 'rgba(255,106,213,.42)' : 'rgba(34,211,238,.36)');
+      lg.addColorStop(1,'rgba(255,106,213,0)');
+      ctx.fillStyle = lg; ctx.fillRect(x0-190, y, 380, 3);
+    }
+    ctx.restore();
+  } else {
+    // 空间站剪影 + 漂浮碎片
+    ctx.save(); ctx.globalAlpha = 0.85;
+    const sx2 = 540, sy2 = 286;
+    ctx.fillStyle = '#1c2743'; ctx.fillRect(sx2-78, sy2-8, 156, 17);
+    ctx.fillRect(sx2-11, sy2-50, 22, 100);
+    ctx.fillStyle = '#28375c'; circle(sx2, sy2, 19); ctx.fill();
+    ctx.fillStyle = '#7dd3fc'; circle(sx2, sy2, 5.5); ctx.fill();
+    ctx.fillStyle = '#16203a'; rr(sx2-92, sy2-24, 26, 46, 5); ctx.fill(); rr(sx2+66, sy2-24, 26, 46, 5); ctx.fill();
+    ctx.restore();
+    for(let i=0;i<12;i++){
+      ctx.fillStyle = 'rgba(150,170,200,.42)';
+      circle(R()*W, 80 + R()*400, 1.8 + R()*7); ctx.fill();
+    }
+  }
+}
 function drawScenery(age, th, t){
   const d = bgData(age);
   for(const it of d.items){
@@ -1661,24 +1874,56 @@ function drawBase(side, t){
     ctx.fillStyle = '#7d8a95'; rr(-108,-36,44,20,4); ctx.fill();
     ctx.fillStyle = '#4d5450'; for(let i=0;i<2;i++){ circle(-98+i*24,-14,9); ctx.fill(); }
     ctx.fillStyle = '#3a403d'; for(let i=0;i<2;i++){ circle(-98+i*24,-14,4.5); ctx.fill(); }
+  } else if(age===4){
+    /* 工业时代：砖石工厂要塞 + 双烟囱 + 齿轮 */
+    ctx.fillStyle = wallC; rr(-126,-124,252,126,5); ctx.fill();
+    ctx.fillStyle = shade(wallC,0.12); rr(-132,-136,264,14,3); ctx.fill();
+    for(let i=-2;i<=2;i++){
+      ctx.fillStyle = '#3a3f47'; rr(i*38-14,-106,28,30,3); ctx.fill();
+      ctx.fillStyle = 'rgba(255,200,120,.32)'; rr(i*38-11,-103,22,11,2); ctx.fill();
+    }
+    ctx.fillStyle = '#6b6455'; rr(-84,-212,26,124,4); ctx.fill(); rr(56,-198,24,110,4); ctx.fill();
+    ctx.fillStyle = '#8a8478'; rr(-89,-220,36,12,3); ctx.fill(); rr(51,-206,34,12,3); ctx.fill();
+    ctx.fillStyle = '#3f4238'; rr(-36,0,72,-86,4); ctx.fill();
+    ctx.fillStyle = acc; rr(-38,-90,76,9,3); ctx.fill();
+    ctx.fillStyle = '#5d5546'; for(let i=-1;i<=1;i++){ circle(i*46,-42,13); ctx.fill(); }
+    ctx.fillStyle = acc; for(let i=-1;i<=1;i++){ circle(i*46,-42,4.5); ctx.fill(); }
+  } else if(age===6){
+    /* 未来纪元：白瓷质感高塔空港 + 品红霓虹（与星际的金属船坞区分开） */
+    ctx.fillStyle = '#e8eef6'; rr(-120,-140,240,142,10); ctx.fill();
+    ctx.fillStyle = '#c3d2e4'; rr(-126,-150,252,14,4); ctx.fill();
+    ctx.fillStyle = '#f6fafd';
+    ctx.beginPath(); ctx.moveTo(-58,0); ctx.lineTo(-40,-212); ctx.lineTo(40,-212); ctx.lineTo(58,0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,106,213,.85)';
+    for(let y=-40;y>-200;y-=26) ctx.fillRect(-34, y, 68, 6);
+    ctx.fillStyle = '#9fd0f0'; rr(-30,-238,60,30,6); ctx.fill();
+    ctx.save(); ctx.shadowColor = '#ff6ad5'; ctx.shadowBlur = 22;
+    ctx.fillStyle = '#ff6ad5'; rr(-16,-232,32,10,4); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.globalAlpha = 0.55 + 0.22*Math.sin(t*2.2);
+    ctx.fillStyle = '#22d3ee'; rr(-112,-120,34,54,4); ctx.fill();
+    ctx.fillStyle = '#ff6ad5'; rr(78,-106,34,42,4); ctx.fill(); ctx.restore();
+    ctx.fillStyle = '#2b3a4d'; rr(-30,0,60,-66,4); ctx.fill();
+    ctx.fillStyle = '#ffd0f0'; rr(-30,-70,60,6,3); ctx.fill();
   } else {
-    ctx.fillStyle = wallC; rr(-124,-132,248,134,8); ctx.fill();
-    ctx.fillStyle = shade(wallC,0.14); rr(-118,-142,236,14,5); ctx.fill();
-    // 能量护盾
-    ctx.save(); ctx.globalAlpha = 0.30 + 0.12*Math.sin(t*1.6);
-    const sg = ctx.createRadialGradient(0,-70,20,0,-70,170);
-    sg.addColorStop(0,'rgba(34,211,238,.05)'); sg.addColorStop(0.75,'rgba(34,211,238,.28)'); sg.addColorStop(1,'rgba(34,211,238,0)');
-    ctx.fillStyle = sg; ctx.beginPath(); ctx.ellipse(0,-70,168,140,0,0,7); ctx.fill(); ctx.restore();
-    ctx.strokeStyle = rgba('#22d3ee',0.55); ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.ellipse(0,-70,166,138,0,0,7); ctx.stroke();
-    // 能量核心
-    ctx.fillStyle = '#2b2547'; rr(-36,0,72,-100,6); ctx.fill();
-    ctx.shadowColor = '#22d3ee'; ctx.shadowBlur = 22;
-    ctx.fillStyle = '#22d3ee'; rr(-12,-64,24,40,6); ctx.fill(); ctx.shadowBlur = 0;
-    for(let i=-2;i<=2;i++){ ctx.fillStyle = '#584a9c'; rr(i*48-10, -150, 20, 56, 4); ctx.fill();
-      ctx.fillStyle = rgba('#c084fc',0.9); rr(i*48-4, -146, 8, 22, 3); ctx.fill(); }
-    ctx.fillStyle = '#584a9c'; rr(-130,-168,16,176,5); ctx.fill(); rr(114,-168,16,176,5); ctx.fill();
-    ctx.fillStyle = rgba('#c084fc',0.8); rr(-127,-160,10,40,4); ctx.fill(); rr(117,-160,10,40,4); ctx.fill();
+    /* 星际纪元：轨道船坞（金属船体 + 机库门 + 停靠穿梭机 + 跑马灯） */
+    ctx.fillStyle = '#4a5468'; rr(-130,-128,260,130,8); ctx.fill();
+    ctx.fillStyle = '#5d6980'; rr(-136,-142,272,14,5); ctx.fill();
+    ctx.fillStyle = '#39435c'; rr(-104,-110,86,112,6); ctx.fill();
+    ctx.fillStyle = '#242c40'; rr(-96,-102,70,96,4); ctx.fill();
+    ctx.strokeStyle = 'rgba(125,211,252,.32)'; ctx.lineWidth = 2;
+    for(let i=-2;i<=2;i++){ ctx.beginPath(); ctx.moveTo(-96,-102+i*19); ctx.lineTo(-26,-102+i*19); ctx.stroke(); }
+    ctx.save(); ctx.shadowColor = '#7dd3fc'; ctx.shadowBlur = 18;
+    ctx.fillStyle = '#7dd3fc'; rr(-100,-108,78,5,2); ctx.fill(); ctx.restore();
+    ctx.fillStyle = '#8fa4c8';
+    ctx.beginPath(); ctx.moveTo(24,-94); ctx.lineTo(76,-72); ctx.lineTo(122,-64); ctx.lineTo(76,-54); ctx.lineTo(24,-48); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#c8d8ec'; rr(36,-88,26,34,5); ctx.fill();
+    ctx.save(); ctx.shadowColor = '#7dd3fc'; ctx.shadowBlur = 16;
+    ctx.fillStyle = '#7dd3fc'; circle(42,-71,7); ctx.fill(); ctx.restore();
+    const lit = Math.floor(t*4) % 2;
+    ctx.fillStyle = lit ? '#ffd08a' : '#39435c';
+    for(let x=-124;x<=124;x+=22){ circle(x,-150,4); ctx.fill(); }
+    ctx.fillStyle = '#c8d8ec'; for(let i=-1;i<=1;i+=2){ rr(i*112-8,-200,16,64,4); ctx.fill(); }
+    ctx.fillStyle = 'rgba(125,211,252,.7)'; for(let i=-1;i<=1;i+=2){ rr(i*112-5,-194,10,20,3); ctx.fill(); }
   }
 
   // 队旗
@@ -1733,8 +1978,8 @@ const TOWER_MAT = [
   { leg:'#8d8375', legDark:'#6b6455', deck:'#a09684', deckTop:'#b8ae9a', acc:'#c9a24a', glow:0 },   // 3 火器
   { leg:'#7d7a72', legDark:'#5d5a54', deck:'#8f8c84', deckTop:'#a8a59c', acc:'#d98a3c', glow:3 },   // 4 工业
   { leg:'#6b7160', legDark:'#4f5546', deck:'#7d8471', deckTop:'#969d89', acc:'#8fd0ff', glow:6 },   // 5 现代
-  { leg:'#4b4470', legDark:'#332e52', deck:'#584a9c', deckTop:'#6f5fbe', acc:'#22d3ee', glow:16 },  // 6 未来
-  { leg:'#334770', legDark:'#22304f', deck:'#3d5488', deckTop:'#4c68a8', acc:'#7dd3fc', glow:22 },  // 7 星际
+  { leg:'#a9b8ce', legDark:'#8496b0', deck:'#cfd8e6', deckTop:'#e8eef6', acc:'#ff6ad5', glow:14 },  // 6 未来
+  { leg:'#4d5d78', legDark:'#39465c', deck:'#5b6d8f', deckTop:'#7488ab', acc:'#7dd3fc', glow:20 },  // 7 星际
 ];
 /* 竖向塔架：4 层平台堆叠在基地上方 */
 function drawTowerRig(side, t){
@@ -1871,8 +2116,8 @@ const TOWER_TINT = [
   { w:'#6b5540', s:'#8d8375', m:'#4b5563' },   // 3 火器
   { w:'#6b5a45', s:'#7d7a72', m:'#6b7280' },   // 4 工业
   { w:'#4f5546', s:'#6b7160', m:'#4f5546' },   // 5 现代
-  { w:'#3b3568', s:'#584a9c', m:'#22d3ee' },   // 6 未来
-  { w:'#26305a', s:'#334770', m:'#7dd3fc' },   // 7 星际
+  { w:'#cfd8e6', s:'#b9c6da', m:'#e879f9' },   // 6 未来（白瓷 + 品红霓虹）
+  { w:'#5b6d8f', s:'#6b7f9e', m:'#7dd3fc' },   // 7 星际（银灰 + 冰蓝）
 ];
 function drawTurretRig(rig, o){
   const age = o.age, th = AGES[age].theme, p = o.side==='p';

@@ -639,7 +639,8 @@ html.touch .preview{display:none !important}
         <li><b>波次推进</b>：攒够两个兵的金币再一起出兵，比零散送兵更容易突破防线。</li>
         <li><b>白热化</b>：开局 4 分钟后双方金币产出持续提升；若 10 分钟仍难分胜负，双方基地会被战火持续消耗，保证对局一定会收束。</li>
         <li><b>兵种</b>每代 3 种：近战、远程、重装，各有克制关系，注意前线肉盾与后排输出的搭配。</li>
-        <li><b>防御塔</b>在基地上方竖向堆叠 4 层，每层可建「穿刺 / 爆破 / 速射」三种定位之一；层数越高越强也越贵（每层 +35 射程、+5% 伤害、+25% 造价）。塔会挡在前线，也会被敌人拆掉。</li>
+        <li><b>防御塔</b>在基地上方竖向堆叠 4 层，每层可建「穿刺 / 爆破 / 速射」三种定位之一；层数越高越强也越贵（每层 +35 射程、+8% 伤害、+25% 造价）。塔会挡在前线，也会被敌人拆掉。</li>
+        <li><b>三种塔怎么选</b>：<b>穿刺</b>最便宜、单发最高，打重装与基地最划算；<b>爆破</b>单发较低但溅射一片，<b>同时打到 3 个敌人时性价比反超穿刺</b>；<b>速射</b>贵约 15%，换来每秒 6~10 发、伤害几乎不浪费，清理残血和轻甲最快。选塔面板里会直接显示每种塔的「金/DPS」。</li>
         <li><b>塔的血量与修复</b>：塔头顶有血条；受损后点击塔（或左下角塔位）打开管理面板，可花金币<b>修复</b>（按缺失血量收费，修满约为原价的 60%）或<b>出售</b>回收 60% 金币。</li>
         <li><b>特殊武器</b>每代不同，冷却完毕后点击按钮，再点击战场位置释放。<b>技能只杀伤敌方部队</b>，既不会破坏敌方基地、也不会破坏敌方防御塔——基地和塔都只能靠部队打掉。</li>
         <li><b>基地随时代加固</b>：每进化一次，基地血量上限提升，并把新增的那部分直接补上。</li>
@@ -841,12 +842,12 @@ const UNITS = [
 const TOWER_ARCH = [
   /* dpsM：相对该时代基准 DPS 的倍率；intervalM：射击间隔倍率（越小越快）
      单发伤害由「目标 DPS × 间隔」反推，因此三种塔的每秒输出相当，手感却完全不同 */
-  { key:'pierce', tag:'穿刺', costM:1.00, dpsM:1.05, intervalM:1.50, rangeM:1.05, splashM:0,
+  { key:'pierce', tag:'穿刺', costM:1.00, dpsM:1.08, intervalM:1.50, rangeM:1.05, splashM:0,
     desc:'慢速重击，单发伤害最高，专克重装与攻城单位' },
-  { key:'blast',  tag:'爆破', costM:1.15, dpsM:0.85, intervalM:1.15, rangeM:0.95, splashM:1.35,
-    desc:'范围溅射，成群步兵的克星' },
-  { key:'rapid',  tag:'速射', costM:1.30, dpsM:0.95, intervalM:0.09, rangeM:1.00, splashM:0,
-    desc:'每秒 6~10 发高频连射，断兵线最稳' },
+  { key:'blast',  tag:'爆破', costM:1.12, dpsM:0.78, intervalM:1.15, rangeM:0.95, splashM:1.35,
+    desc:'范围溅射，一个塔打一片，成群步兵的克星' },
+  { key:'rapid',  tag:'速射', costM:1.15, dpsM:0.92, intervalM:0.09, rangeM:1.00, splashM:0,
+    desc:'每秒 6~10 发高频连射，不浪费伤害、反应最快' },
 ];
 const TOWER_BASE = [
   { name:'巨石',   cost:80,  hp:480,  atk:41, rate:1.60, range:560, proj:'boulder', splash:48 },
@@ -3706,6 +3707,7 @@ function showPreview(kind, age, idx, type){
     info.appendChild(pvTitle(d.name + '（' + ['第 1 层','第 2 层','第 3 层','第 4 层'][idx] + '）'));
     [['造价', '🪙' + cost], ['单发伤害', Math.round(d.atk * b.dmg)],
      ['每秒伤害', dps], ['射程', Math.round(d.range + b.range)],
+     ['性价比', (cost/(d.atk/d.rate)).toFixed(2) + ' 金/DPS'],
      ['出售回收', '🪙' + Math.round(cost * SELL_RATE)]
     ].forEach(r=>info.appendChild(pvRow(r[0], r[1])));
     info.appendChild(pvDesc(d.desc + (d.splash ? ' · 溅射范围 ' + d.splash : '') + ' · 层数越高越强但造价越贵 · 受损可花金币修复'));
@@ -3851,7 +3853,8 @@ function openTowerPicker(slot){
     const st = document.createElement('div'); st.className = 'tp-st';
     st.textContent = '🪙' + cost + ' · ' + (d.splash ? '溅射' : '单体');
     const st2 = document.createElement('div'); st2.className = 'tp-st';
-    st2.textContent = 'DPS ' + (d.atk/Math.max(0.05,d.rate)).toFixed(0) + ' · 射程 ' + d.range;
+    const ddps = d.atk/Math.max(0.05,d.rate);
+    st2.textContent = 'DPS ' + ddps.toFixed(0) + ' · ' + (cost/ddps).toFixed(2) + ' 金/DPS · 射程 ' + d.range;
     card.appendChild(cvs); card.appendChild(nm); card.appendChild(st); card.appendChild(st2);
     card.onclick = ()=>{ G.towerPick = ti; closeTowerPicker(); tryBuildTurret('p', slot, ti); buildDock(); syncHUD(true); };
     card.onmouseenter = ()=>showPreview('turret', G.p.age, slot, ti);
